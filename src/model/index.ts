@@ -12,6 +12,8 @@ export type {
 } from './types'
 
 export {
+  ARROWS,
+  DIRECTIONS,
   FINNISH_LETTERS,
   MAX_CLUES_PER_CELL,
   isBlockedCell,

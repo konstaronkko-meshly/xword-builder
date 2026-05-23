@@ -8,6 +8,20 @@ import type {
   LetterCell,
 } from './types'
 
+/** All answer directions (runtime list, kept in sync with {@link Direction}). */
+export const DIRECTIONS = [
+  'across',
+  'down',
+] as const satisfies readonly Direction[]
+
+/** All arrow kinds (runtime list, kept in sync with {@link Arrow}). */
+export const ARROWS = [
+  'right',
+  'down',
+  'down-then-right',
+  'right-then-down',
+] as const satisfies readonly Arrow[]
+
 /** The Finnish alphabet, in collation order. Single uppercase graphemes. */
 export const FINNISH_LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZÅÄÖ'
 
