@@ -1,0 +1,68 @@
+/* Equal-size arrow-word grid. Tokens come from src/styles/tokens.css. */
+
+.xgrid {
+  display: grid;
+  gap: 1px;
+  padding: 1px;
+  width: max-content;
+  background: rgba(28, 40, 29, 0.25); /* hairline gridlines show through gaps */
+  border-radius: var(--r-sm);
+  border: 1px solid rgba(28, 40, 29, 0.25);
+}
+
+.xcell {
+  width: var(--xgrid-cell);
+  height: var(--xgrid-cell);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--pure-white);
+  overflow: hidden;
+}
+
+/* Fillable letter cell. */
+.xcell--letter {
+  font-size: calc(var(--xgrid-cell) * 0.5);
+  font-weight: 500;
+  line-height: 1;
+  color: var(--dark-green);
+  text-transform: uppercase;
+}
+
+/* Not-in-play cell. */
+.xcell--blocked {
+  background: var(--dark-green);
+}
+
+/* Clue cell: up to two stacked clues, each with a leading arrow. */
+.xcell--clue {
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: center;
+  gap: 1px;
+  padding: 2px 3px;
+  background: var(--light-green);
+  color: var(--dark-green);
+  font-size: calc(var(--xgrid-cell) * 0.16);
+  line-height: 1.05;
+  text-align: left;
+}
+
+.xcell__clue {
+  display: flex;
+  align-items: flex-start;
+  gap: 2px;
+}
+
+.xcell__arrow {
+  flex: none;
+  font-weight: 700;
+  color: var(--mid-green);
+}
+
+.xcell__text {
+  overflow: hidden;
+  min-width: 0;
+  word-break: break-word;
+  hyphens: auto;
+}

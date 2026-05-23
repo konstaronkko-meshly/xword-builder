@@ -130,6 +130,34 @@ body {
   margin: 0;
 }
 
+/* ---- Build mode ---- */
+.build__head {
+  margin-bottom: var(--sp-5);
+}
+
+.build__title {
+  font-size: 28px;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  margin: var(--sp-2) 0 var(--sp-1);
+  color: var(--dark-green);
+}
+
+.build__hint {
+  margin: 0;
+  font-size: 14px;
+  color: var(--mid-green);
+}
+
+.build__grid {
+  display: flex;
+  justify-content: center;
+  padding: var(--sp-6);
+  background: var(--pure-white);
+  border: 1px solid rgba(28, 40, 29, 0.08);
+  border-radius: var(--r-lg);
+}
+
 @media (max-width: 600px) {
   .app__bar {
     flex-direction: column;

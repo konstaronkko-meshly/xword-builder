@@ -14,7 +14,7 @@ export const fi = {
   },
   build: {
     eyebrow: 'Rakennustila',
-    placeholder: 'Ristikon muokkaus tulee tähän.',
+    sampleHint: 'Esikatselu — ruudukon muokkaustyökalut tulevat seuraavaksi.',
   },
   solve: {
     eyebrow: 'Ratkaisutila',
