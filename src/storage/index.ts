@@ -17,3 +17,11 @@ export {
 } from './puzzleStore'
 
 export { downloadPuzzle, readPuzzleFile } from './file'
+
+export {
+  clearSolveState,
+  loadSolveState,
+  saveSolveState,
+  solveStateKey,
+  type SolveState,
+} from './solveState'

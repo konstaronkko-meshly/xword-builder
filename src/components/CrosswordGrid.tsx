@@ -35,6 +35,8 @@ interface CrosswordGridProps {
   showSolutions?: boolean
   /** Entered letters by `${row}-${col}` key (solve mode). */
   entries?: ReadonlyMap<string, string>
+  /** Cells flagged incorrect by a solve-mode check. */
+  wrong?: ReadonlyArray<Coord>
 }
 
 const coordKey = (c: Coord) => `${c.row}-${c.col}`
@@ -54,9 +56,11 @@ export function CrosswordGrid({
   warnings = [],
   showSolutions = true,
   entries,
+  wrong = [],
 }: CrosswordGridProps) {
   const highlightedKeys = new Set(highlighted.map(coordKey))
   const warningKeys = new Set(warnings.map(coordKey))
+  const wrongKeys = new Set(wrong.map(coordKey))
 
   return (
     <div
@@ -87,6 +91,7 @@ export function CrosswordGrid({
               selected={selected?.row === r && selected.col === c}
               active={highlightedKeys.has(key)}
               warning={warningKeys.has(key)}
+              wrong={wrongKeys.has(key)}
               onSelect={
                 onSelectCell
                   ? () => onSelectCell({ row: r, col: c })
@@ -120,6 +125,7 @@ interface CellViewProps {
   selected: boolean
   active: boolean
   warning: boolean
+  wrong: boolean
   onSelect?: () => void
 }
 
@@ -130,6 +136,7 @@ function CellView({
   selected,
   active,
   warning,
+  wrong,
   onSelect,
 }: CellViewProps) {
   const className =
@@ -137,6 +144,7 @@ function CellView({
     (active ? ' is-active' : '') +
     (selected ? ' is-selected' : '') +
     (warning ? ' is-warning' : '') +
+    (wrong ? ' is-wrong' : '') +
     (onSelect ? ' is-interactive' : '')
 
   return (

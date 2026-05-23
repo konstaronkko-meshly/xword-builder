@@ -1,15 +1,38 @@
 // @vitest-environment jsdom
 import { cleanup, fireEvent, render } from '@testing-library/react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
+import {
+  createEmptyPuzzle,
+  makeClue,
+  makeClueCell,
+  makeLetterCell,
+  withCell,
+} from '../model'
 import { createSamplePuzzle } from '../fixtures/samplePuzzle'
 import { SolveMode } from './SolveMode'
 
 Element.prototype.scrollIntoView = vi.fn()
-afterEach(cleanup)
+afterEach(() => {
+  cleanup()
+  localStorage.clear() // solve state persists to jsdom localStorage
+})
 
 const cellsOf = (c: HTMLElement) => c.querySelectorAll('[role="gridcell"]')
 const app = (c: HTMLElement) =>
   c.querySelector('[role="application"]') as HTMLElement
+
+// A tiny solvable puzzle: clue at (0,0) → "KO" across at (0,1),(0,2).
+function tinyPuzzle() {
+  let p = createEmptyPuzzle(1, 3, 'Pikku')
+  p = withCell(
+    p,
+    { row: 0, col: 0 },
+    makeClueCell([makeClue('V', 'across', 'right')]),
+  )
+  p = withCell(p, { row: 0, col: 1 }, makeLetterCell('K'))
+  p = withCell(p, { row: 0, col: 2 }, makeLetterCell('O'))
+  return p
+}
 
 describe('SolveMode — render finished puzzle', () => {
   it('shows clues but leaves letter cells empty (never reveals solutions)', () => {
@@ -84,5 +107,57 @@ describe('SolveMode — click clue to focus answer', () => {
     const { container } = render(<SolveMode puzzle={createSamplePuzzle()} />)
     fireEvent.click(cellsOf(container)[0]) // → across KISA, 4 cells
     expect(container.querySelectorAll('.is-active')).toHaveLength(4)
+  })
+})
+
+describe('SolveMode — check / reveal / completion / resume', () => {
+  const byText = (c: HTMLElement, t: string) =>
+    [...c.querySelectorAll('button')].find((b) => b.textContent === t)!
+
+  it('flags a wrong entry on Tarkista', () => {
+    const { container } = render(<SolveMode puzzle={tinyPuzzle()} />)
+    fireEvent.click(cellsOf(container)[1]) // (0,1), solution 'K'
+    fireEvent.keyDown(app(container), { key: 'x' }) // wrong
+    fireEvent.click(byText(container, 'Tarkista'))
+    expect(cellsOf(container)[1].classList.contains('is-wrong')).toBe(true)
+  })
+
+  it('reveals the selected letter with the solution', () => {
+    const { container } = render(<SolveMode puzzle={tinyPuzzle()} />)
+    fireEvent.click(cellsOf(container)[1])
+    fireEvent.click(byText(container, 'Paljasta kirjain'))
+    expect(cellsOf(container)[1].textContent).toBe('K')
+  })
+
+  it('reveals a whole word and detects completion', () => {
+    const { container, queryByText } = render(
+      <SolveMode puzzle={tinyPuzzle()} />,
+    )
+    expect(queryByText('Valmis! Ristikko on oikein.')).toBeNull()
+    fireEvent.click(cellsOf(container)[1]) // focus the across word
+    fireEvent.click(byText(container, 'Paljasta sana'))
+    expect(cellsOf(container)[1].textContent).toBe('K')
+    expect(cellsOf(container)[2].textContent).toBe('O')
+    expect(queryByText('Valmis! Ristikko on oikein.')).toBeTruthy()
+  })
+
+  it('resumes entered letters after a remount (persistence)', () => {
+    const puzzle = tinyPuzzle()
+    const first = render(<SolveMode puzzle={puzzle} />)
+    fireEvent.click(cellsOf(first.container)[1])
+    fireEvent.keyDown(app(first.container), { key: 'k' })
+    expect(cellsOf(first.container)[1].textContent).toBe('K')
+    first.unmount()
+
+    const second = render(<SolveMode puzzle={puzzle} />)
+    expect(cellsOf(second.container)[1].textContent).toBe('K')
+  })
+
+  it('clears all entries with Tyhjennä', () => {
+    const { container } = render(<SolveMode puzzle={tinyPuzzle()} />)
+    fireEvent.click(cellsOf(container)[1])
+    fireEvent.keyDown(app(container), { key: 'k' })
+    fireEvent.click(byText(container, 'Tyhjennä'))
+    expect(cellsOf(container)[1].textContent).toBe('')
   })
 })

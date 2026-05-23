@@ -26,6 +26,12 @@
   background: var(--cream);
 }
 
+/* Solve-mode "wrong" letter: orange, bold (the deck has no red). */
+.xcell.is-wrong.xcell--letter {
+  color: var(--orange);
+  font-weight: 700;
+}
+
 /* Validation issue marker: a small dot in the top-right corner. */
 .xcell.is-warning::after {
   content: '';

@@ -54,6 +54,14 @@ export const fi = {
     eyebrow: 'Ratkaisutila',
     hint: 'Lue vihjeet ruuduista ja täytä kirjaimet. Vastaukset eivät näy.',
     gridLabel: 'Ratkaistava ruudukko',
+    actions: {
+      label: 'Ratkaisutyökalut',
+      check: 'Tarkista',
+      revealLetter: 'Paljasta kirjain',
+      revealWord: 'Paljasta sana',
+      clear: 'Tyhjennä',
+      completed: 'Valmis! Ristikko on oikein.',
+    },
   },
 } as const
 

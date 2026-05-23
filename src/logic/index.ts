@@ -12,3 +12,6 @@ export {
 
 export type { ValidationIssue, ValidationIssueKind } from './validation'
 export { isStructurallyValid, validatePuzzle } from './validation'
+
+export type { CellStatus } from './solve'
+export { cellStatus, isComplete, letterCoords, wrongCells } from './solve'

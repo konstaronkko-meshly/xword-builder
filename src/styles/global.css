@@ -150,6 +150,26 @@ body {
   color: var(--mid-green);
 }
 
+.solve__toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-2);
+  margin-bottom: var(--sp-4);
+}
+
+.solve__done {
+  margin-bottom: var(--sp-4);
+  padding: var(--sp-3) var(--sp-4);
+  border-radius: var(--r-md);
+  background: var(--terminal-green);
+  color: var(--dark-green);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
 .solve__grid {
   display: flex;
   justify-content: center;
@@ -157,6 +177,11 @@ body {
   background: var(--pure-white);
   border: 1px solid rgba(28, 40, 29, 0.08);
   border-radius: var(--r-lg);
+}
+
+.solve__grid:focus-visible {
+  outline: 2px solid var(--terminal-green);
+  outline-offset: 2px;
 }
 
 .build__title {
