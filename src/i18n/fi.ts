@@ -100,6 +100,52 @@ export const fi = {
     print: 'Tulosta',
     close: 'Sulje',
   },
+  help: {
+    button: 'Ohje',
+    title: 'Ohje',
+    close: 'Sulje',
+    building: {
+      title: 'Rakentaminen',
+      body: [
+        'Valitse ruutu napauttamalla ja kirjoita kirjaimet näppäimistöllä.',
+        'Vaihda ruudun tyyppiä työkaluriviltä tai näppäimillä 1–3: kirjain, vihje tai musta ruutu.',
+        'Lisää ruutuun yksi tai kaksi vihjettä ja valitse kummankin suunta (vaakaan tai alas). Vihje voi olla tekstiä tai kuva.',
+      ],
+    },
+    solving: {
+      title: 'Ratkaiseminen',
+      body: [
+        'Lue vihjeet ruuduista ja täytä kirjaimet. Oikeat vastaukset eivät näy valmiina.',
+        'Tarkista merkitsee väärät kirjaimet; Paljasta kirjain tai Paljasta sana auttaa eteenpäin.',
+        'Aika käynnistyy ensimmäisestä kirjaimesta ja pysähtyy, kun ristikko on oikein.',
+      ],
+    },
+    keyboard: {
+      title: 'Näppäimistö',
+      items: [
+        ['Nuolinäppäimet', 'Siirrä valintaa ruudukossa.'],
+        ['Kirjain', 'Kirjoita kirjain ja siirry sanan seuraavaan ruutuun.'],
+        ['Askelpalautin', 'Tyhjennä ruutu tai siirry taaksepäin ja tyhjennä.'],
+        ['Saman ruudun napautus', 'Vaihtaa kirjoitussuuntaa (vaaka/pysty).'],
+        [
+          '1 / 2 / 3',
+          'Rakennustilassa: vaihtaa ruudun tyyppiä (kirjain/vihje/musta).',
+        ],
+      ],
+    },
+    symbols: {
+      title: 'Symbolit',
+      body: 'Ruudukon värit, nuolet ja korostukset selitetään tässä.',
+    },
+    solutionWord: {
+      title: 'Ratkaisusana',
+      body: 'Vihje, jossa on vain nuoli eikä tekstiä, merkitsee ratkaisusanan. Sen ruudut on korostettu, ja sana selviää ristikkäisten vastausten kautta.',
+    },
+    printing: {
+      title: 'Tulostus',
+      body: 'Tulosta-painike avaa tulostusnäkymän. Voit tulostaa tyhjän ristikon ratkottavaksi tai vastaukset sisältävän vastausavaimen.',
+    },
+  },
 } as const
 
 export type Strings = typeof fi

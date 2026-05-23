@@ -145,3 +145,18 @@ describe('App — print', () => {
     expect(container.querySelector('.print-overlay')).toBeNull()
   })
 })
+
+describe('App — help (Ohje)', () => {
+  it('opens the help overlay with its sections and closes it', () => {
+    const { container, getByText } = render(<App />)
+    expect(container.querySelector('.help-overlay')).toBeNull()
+
+    fireEvent.click(getByText('Ohje')) // header button (unique before opening)
+    expect(container.querySelector('.help-overlay')).toBeTruthy()
+    // A representative section heading renders.
+    expect(getByText('Näppäimistö')).toBeTruthy()
+
+    fireEvent.click(getByText('Sulje'))
+    expect(container.querySelector('.help-overlay')).toBeNull()
+  })
+})

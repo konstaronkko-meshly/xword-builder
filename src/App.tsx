@@ -3,6 +3,7 @@ import { fi } from './i18n/fi'
 import { ModeToggle, type Mode } from './components/ModeToggle'
 import { PuzzleLibrary } from './components/PuzzleLibrary'
 import { PrintView } from './components/PrintView'
+import { HelpOverlay } from './components/HelpOverlay'
 import { BuildMode } from './modes/BuildMode'
 import { SolveMode } from './modes/SolveMode'
 import { createDefaultPuzzle } from './fixtures/defaultPuzzle'
@@ -25,6 +26,7 @@ export default function App() {
   const [mode, setMode] = useState<Mode>('solve')
   const [libraryOpen, setLibraryOpen] = useState(false)
   const [printOpen, setPrintOpen] = useState(false)
+  const [helpOpen, setHelpOpen] = useState(false)
   // The working puzzle (lifted here) and the storage id it was loaded/saved as.
   const [puzzle, setPuzzle] = useState(createDefaultPuzzle)
   const [currentId, setCurrentId] = useState<string | null>(null)
@@ -133,6 +135,13 @@ export default function App() {
             >
               {fi.print.button}
             </button>
+            <button
+              type="button"
+              className="mode-toggle__btn mode-toggle__btn--solo"
+              onClick={() => setHelpOpen(true)}
+            >
+              {fi.help.button}
+            </button>
           </div>
         </header>
 
@@ -163,6 +172,8 @@ export default function App() {
       {printOpen && (
         <PrintView puzzle={puzzle} onClose={() => setPrintOpen(false)} />
       )}
+
+      {helpOpen && <HelpOverlay onClose={() => setHelpOpen(false)} />}
     </>
   )
 }

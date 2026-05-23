@@ -1,0 +1,107 @@
+/* "Ohje" help overlay — a dismissible dialog. Tokens from src/styles/tokens.css.
+   Mirrors the print overlay's modal pattern. */
+
+.help-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: var(--sp-6);
+  background: rgba(28, 40, 29, 0.55);
+  overflow: auto;
+}
+
+.help-panel {
+  width: 100%;
+  max-width: 640px;
+  background: var(--pure-white);
+  border-radius: var(--r-lg);
+  overflow: hidden;
+}
+
+.help-panel__bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-4);
+  padding: var(--sp-4) var(--sp-5);
+  background: var(--dark-green);
+  color: var(--pale-green);
+}
+
+.help-panel__title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.help-panel__body {
+  padding: var(--sp-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-5);
+}
+
+.help__section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+
+.help__heading {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--mid-green);
+}
+
+.help__text {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--dark-green);
+}
+
+/* Keyboard shortcuts as a term/description list. */
+.help__keys {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+
+.help__key {
+  display: flex;
+  gap: var(--sp-3);
+  align-items: baseline;
+}
+
+.help__key dt {
+  flex: 0 0 40%;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--dark-green);
+}
+
+.help__key dd {
+  flex: 1;
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.4;
+  color: var(--dark-green);
+}
+
+@media (max-width: 600px) {
+  .help__key {
+    flex-direction: column;
+    gap: 2px;
+  }
+  .help__key dt {
+    flex-basis: auto;
+  }
+}
