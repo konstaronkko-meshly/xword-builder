@@ -67,14 +67,21 @@ export function SolveMode({ puzzle }: SolveModeProps) {
     })
   }
 
-  const { selected, activeSlot, selectCell, handleKeyDown, slots } =
-    useGridEntry({
-      puzzle,
-      gridRef,
-      focusAnswerOnClueClick: true,
-      getLetter: (coord) => entries.get(keyOf(coord)) ?? '',
-      setLetter: setEntry,
-    })
+  const {
+    selected,
+    activeSlot,
+    selectCell,
+    handleKeyDown,
+    handleInput,
+    inputRef,
+    slots,
+  } = useGridEntry({
+    puzzle,
+    gridRef,
+    focusAnswerOnClueClick: true,
+    getLetter: (coord) => entries.get(keyOf(coord)) ?? '',
+    setLetter: setEntry,
+  })
 
   const completed = useMemo(
     () => isComplete(puzzle, entries),
@@ -173,11 +180,21 @@ export function SolveMode({ puzzle }: SolveModeProps) {
       <div
         ref={gridRef}
         className="solve__grid"
-        tabIndex={0}
         role="application"
         aria-label={fi.solve.gridLabel}
         onKeyDown={handleKeyDown}
+        onInput={handleInput}
       >
+        <input
+          ref={inputRef}
+          className="grid-input"
+          aria-label={fi.solve.gridLabel}
+          inputMode="text"
+          autoCapitalize="characters"
+          autoComplete="off"
+          autoCorrect="off"
+          spellCheck={false}
+        />
         <CrosswordGrid
           puzzle={puzzle}
           showSolutions={false}

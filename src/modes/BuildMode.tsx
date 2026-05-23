@@ -86,6 +86,8 @@ export function BuildMode({ puzzle, setPuzzle }: BuildModeProps) {
     slots,
     selectCell,
     handleKeyDown,
+    handleInput,
+    inputRef,
   } = useGridEntry({
     puzzle,
     gridRef,
@@ -286,11 +288,21 @@ export function BuildMode({ puzzle, setPuzzle }: BuildModeProps) {
         <div
           ref={gridRef}
           className="build__grid"
-          tabIndex={0}
           role="application"
           aria-label={fi.build.tools.gridLabel}
           onKeyDown={onKeyDown}
+          onInput={handleInput}
         >
+          <input
+            ref={inputRef}
+            className="grid-input"
+            aria-label={fi.build.tools.gridLabel}
+            inputMode="text"
+            autoCapitalize="characters"
+            autoComplete="off"
+            autoCorrect="off"
+            spellCheck={false}
+          />
           <CrosswordGrid
             puzzle={puzzle}
             selected={selected}
