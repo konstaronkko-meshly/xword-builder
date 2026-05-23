@@ -1,5 +1,6 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { fi } from '../i18n/fi'
+import { deriveSlots, solutionWordCells } from '../logic'
 import type { Puzzle } from '../model'
 import { CrosswordGrid } from './CrosswordGrid'
 import './PrintView.css'
@@ -19,6 +20,10 @@ interface PrintViewProps {
  */
 export function PrintView({ puzzle, onClose }: PrintViewProps) {
   const [showAnswers, setShowAnswers] = useState(false)
+  const solutionCells = useMemo(
+    () => solutionWordCells(deriveSlots(puzzle)),
+    [puzzle],
+  )
 
   // Esc closes the overlay (matches the rest of the app's keyboard-first feel).
   useEffect(() => {
@@ -64,7 +69,11 @@ export function PrintView({ puzzle, onClose }: PrintViewProps) {
         {showAnswers && (
           <p className="print-sheet__caption">{fi.print.answerKey}</p>
         )}
-        <CrosswordGrid puzzle={puzzle} showSolutions={showAnswers} />
+        <CrosswordGrid
+          puzzle={puzzle}
+          showSolutions={showAnswers}
+          solutionCells={solutionCells}
+        />
       </div>
     </div>
   )

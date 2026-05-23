@@ -30,6 +30,13 @@
   overflow: hidden;
 }
 
+/* Solution-word (ratkaisusana) cell: a clueless slot's answer, highlighted so
+   the solver knows to assemble it from crossing answers. Defined before
+   .is-active so the active-slot tint wins when a cell is both. */
+.xcell.is-solution.xcell--letter {
+  background: var(--cyan);
+}
+
 /* Active word slot highlight (warm tint behind letter cells). */
 .xcell.is-active.xcell--letter {
   background: var(--cream);

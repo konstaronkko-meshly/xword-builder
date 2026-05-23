@@ -128,6 +128,11 @@
     background: #000;
   }
 
+  /* Solution-word run: a light grey fill so it reads on a B/W printer. */
+  .print-sheet .xcell.is-solution.xcell--letter {
+    background: #d9d9d9;
+  }
+
   .print-sheet .xcell--clue {
     background: #fff;
     color: #000;

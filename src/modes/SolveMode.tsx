@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { CrosswordGrid } from '../components/CrosswordGrid'
 import { useGridEntry } from '../components/useGridEntry'
 import { fi } from '../i18n/fi'
-import { isComplete, wrongCells } from '../logic'
+import { isComplete, solutionWordCells, wrongCells } from '../logic'
 import { getCell, isLetterCell, type Coord, type Puzzle } from '../model'
 import {
   loadSolveState,
@@ -67,13 +67,14 @@ export function SolveMode({ puzzle }: SolveModeProps) {
     })
   }
 
-  const { selected, activeSlot, selectCell, handleKeyDown } = useGridEntry({
-    puzzle,
-    gridRef,
-    focusAnswerOnClueClick: true,
-    getLetter: (coord) => entries.get(keyOf(coord)) ?? '',
-    setLetter: setEntry,
-  })
+  const { selected, activeSlot, selectCell, handleKeyDown, slots } =
+    useGridEntry({
+      puzzle,
+      gridRef,
+      focusAnswerOnClueClick: true,
+      getLetter: (coord) => entries.get(keyOf(coord)) ?? '',
+      setLetter: setEntry,
+    })
 
   const completed = useMemo(
     () => isComplete(puzzle, entries),
@@ -185,6 +186,7 @@ export function SolveMode({ puzzle }: SolveModeProps) {
           onSelectCell={selectCell}
           highlighted={activeSlot?.cells ?? []}
           wrong={[...wrong].map(coordOf)}
+          solutionCells={solutionWordCells(slots)}
         />
       </div>
     </section>
