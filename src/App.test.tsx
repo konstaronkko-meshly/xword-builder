@@ -145,3 +145,41 @@ describe('App — print', () => {
     expect(container.querySelector('.print-overlay')).toBeNull()
   })
 })
+
+describe('App — help (Ohje)', () => {
+  it('opens the help overlay with its sections and closes it', () => {
+    const { container, getByText } = render(<App />)
+    expect(container.querySelector('.help-overlay')).toBeNull()
+
+    fireEvent.click(getByText('Ohje')) // header button (unique before opening)
+    expect(container.querySelector('.help-overlay')).toBeTruthy()
+    // A representative section heading renders.
+    expect(getByText('Näppäimistö')).toBeTruthy()
+
+    fireEvent.click(getByText('Sulje'))
+    expect(container.querySelector('.help-overlay')).toBeNull()
+  })
+})
+
+describe('App — first-run help nudge', () => {
+  it('shows on a fresh profile, then stays gone after dismiss', () => {
+    const first = render(<App />)
+    expect(first.container.querySelector('.help-nudge')).toBeTruthy()
+    fireEvent.click(
+      first.container.querySelector('.help-nudge__close') as HTMLElement,
+    )
+    expect(first.container.querySelector('.help-nudge')).toBeNull()
+    first.unmount()
+
+    // Persisted: a fresh mount (same localStorage) no longer shows it.
+    const second = render(<App />)
+    expect(second.container.querySelector('.help-nudge')).toBeNull()
+  })
+
+  it('dismisses the nudge when the Ohje overlay is opened', () => {
+    const { container, getByText } = render(<App />)
+    expect(container.querySelector('.help-nudge')).toBeTruthy()
+    fireEvent.click(getByText('Ohje'))
+    expect(container.querySelector('.help-nudge')).toBeNull()
+  })
+})

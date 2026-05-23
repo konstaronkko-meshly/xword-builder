@@ -36,7 +36,7 @@ export const fi = {
   build: {
     eyebrow: 'Rakennustila',
     editHint:
-      'Valitse ruutu ja kirjoita kirjaimet näppäimistöllä. Nuolet siirtävät, 1–3 vaihtavat tyypin, sama ruutu vaihtaa suunnan.',
+      'Valitse ruutu napauttamalla ja kirjoita kirjaimet. Näppäinkomennot ja symbolit löytyvät Ohjeesta.',
     tools: {
       label: 'Ruututyökalut',
       gridLabel: 'Ristikon ruudukko',
@@ -78,7 +78,7 @@ export const fi = {
   },
   solve: {
     eyebrow: 'Ratkaisutila',
-    hint: 'Lue vihjeet ruuduista ja täytä kirjaimet. Vastaukset eivät näy.',
+    hint: 'Lue vihjeet ruuduista ja täytä kirjaimet — vastaukset eivät näy. Apua saat Ohjeesta.',
     gridLabel: 'Ratkaistava ruudukko',
     actions: {
       label: 'Ratkaisutyökalut',
@@ -99,6 +99,65 @@ export const fi = {
     answerKey: 'Vastausavain',
     print: 'Tulosta',
     close: 'Sulje',
+  },
+  help: {
+    button: 'Ohje',
+    title: 'Ohje',
+    close: 'Sulje',
+    nudge:
+      'Uusi täällä? Katso Ohjeesta, miten ristikkoa rakennetaan ja ratkaistaan.',
+    building: {
+      title: 'Rakentaminen',
+      body: [
+        'Valitse ruutu napauttamalla ja kirjoita kirjaimet näppäimistöllä.',
+        'Vaihda ruudun tyyppiä työkaluriviltä tai näppäimillä 1–3: kirjain, vihje tai musta ruutu.',
+        'Lisää ruutuun yksi tai kaksi vihjettä ja valitse kummankin suunta (vaakaan tai alas). Vihje voi olla tekstiä tai kuva.',
+      ],
+    },
+    solving: {
+      title: 'Ratkaiseminen',
+      body: [
+        'Lue vihjeet ruuduista ja täytä kirjaimet. Oikeat vastaukset eivät näy valmiina.',
+        'Tarkista merkitsee väärät kirjaimet; Paljasta kirjain tai Paljasta sana auttaa eteenpäin.',
+        'Aika käynnistyy ensimmäisestä kirjaimesta ja pysähtyy, kun ristikko on oikein.',
+      ],
+    },
+    keyboard: {
+      title: 'Näppäimistö',
+      items: [
+        ['Nuolinäppäimet', 'Siirrä valintaa ruudukossa.'],
+        ['Kirjain', 'Kirjoita kirjain ja siirry sanan seuraavaan ruutuun.'],
+        ['Askelpalautin', 'Tyhjennä ruutu tai siirry taaksepäin ja tyhjennä.'],
+        ['Saman ruudun napautus', 'Vaihtaa kirjoitussuuntaa (vaaka/pysty).'],
+        [
+          '1 / 2 / 3',
+          'Rakennustilassa: vaihtaa ruudun tyyppiä (kirjain/vihje/musta).',
+        ],
+      ],
+    },
+    symbols: {
+      title: 'Symbolit',
+      intro: 'Ruudukon ruudut, nuolet ja korostukset:',
+      legend: {
+        letter: 'Kirjainruutu — täytettävä kirjain',
+        clue: 'Vihjeruutu — vihje tai kuva',
+        blocked: 'Musta ruutu — ei käytössä',
+        arrowRight: 'Nuoli: vastaus jatkuu oikealle',
+        arrowDown: 'Nuoli: vastaus jatkuu alas',
+        solution: 'Ratkaisusana — kootaan ristikkäisistä vastauksista',
+        active: 'Aktiivinen sana',
+        wrong: 'Väärä kirjain (Tarkista)',
+        warning: 'Huomautus rakennustilassa',
+      },
+    },
+    solutionWord: {
+      title: 'Ratkaisusana',
+      body: 'Vihje, jossa on vain nuoli eikä tekstiä, merkitsee ratkaisusanan. Sen ruudut on korostettu, ja sana selviää ristikkäisten vastausten kautta.',
+    },
+    printing: {
+      title: 'Tulostus',
+      body: 'Tulosta-painike avaa tulostusnäkymän. Voit tulostaa tyhjän ristikon ratkottavaksi tai vastaukset sisältävän vastausavaimen.',
+    },
   },
 } as const
 

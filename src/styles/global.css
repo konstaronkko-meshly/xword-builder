@@ -111,6 +111,74 @@ body {
   color: var(--dark-green);
 }
 
+/* ---- First-run help nudge (anchored under the Ohje button) ---- */
+.help-anchor {
+  position: relative;
+  display: inline-flex;
+}
+
+.help-nudge {
+  position: absolute;
+  top: calc(100% + var(--sp-3));
+  right: 0;
+  z-index: 50;
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-2);
+  width: max-content;
+  max-width: 260px;
+  padding: var(--sp-3) var(--sp-4);
+  background: var(--terminal-green);
+  color: var(--dark-green);
+  border-radius: var(--r-md);
+  box-shadow: 0 6px 20px rgba(28, 40, 29, 0.25);
+}
+
+/* Caret pointing up at the Ohje button. */
+.help-nudge::before {
+  content: '';
+  position: absolute;
+  top: -6px;
+  right: 18px;
+  width: 12px;
+  height: 12px;
+  background: var(--terminal-green);
+  transform: rotate(45deg);
+}
+
+.help-nudge__text {
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.help-nudge__close {
+  flex: none;
+  border: 0;
+  background: none;
+  color: var(--dark-green);
+  font-size: 18px;
+  line-height: 1;
+  padding: 0;
+  cursor: pointer;
+}
+
+.help-nudge__close:focus-visible {
+  outline: 2px solid var(--dark-green);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .help-nudge {
+    animation: help-nudge-in 160ms ease-out;
+  }
+  @keyframes help-nudge-in {
+    from {
+      opacity: 0;
+      transform: translateY(-4px);
+    }
+  }
+}
+
 /* ---- Main content ---- */
 .app__main {
   flex: 1;

@@ -3,6 +3,7 @@ import { fi } from './i18n/fi'
 import { ModeToggle, type Mode } from './components/ModeToggle'
 import { PuzzleLibrary } from './components/PuzzleLibrary'
 import { PrintView } from './components/PrintView'
+import { HelpOverlay } from './components/HelpOverlay'
 import { BuildMode } from './modes/BuildMode'
 import { SolveMode } from './modes/SolveMode'
 import { createDefaultPuzzle } from './fixtures/defaultPuzzle'
@@ -11,6 +12,8 @@ import {
   PuzzleParseError,
   PuzzleStore,
   downloadPuzzle,
+  hasSeenHelp,
+  markHelpSeen,
   readPuzzleFile,
   type PuzzleSummary,
 } from './storage'
@@ -25,6 +28,19 @@ export default function App() {
   const [mode, setMode] = useState<Mode>('solve')
   const [libraryOpen, setLibraryOpen] = useState(false)
   const [printOpen, setPrintOpen] = useState(false)
+  const [helpOpen, setHelpOpen] = useState(false)
+  // First-run nudge toward the Ohje button (once per browser).
+  const [showNudge, setShowNudge] = useState(() => !hasSeenHelp())
+
+  function dismissNudge() {
+    markHelpSeen()
+    setShowNudge(false)
+  }
+
+  function openHelp() {
+    setHelpOpen(true)
+    dismissNudge() // opening Ohje counts as "seen"
+  }
   // The working puzzle (lifted here) and the storage id it was loaded/saved as.
   const [puzzle, setPuzzle] = useState(createDefaultPuzzle)
   const [currentId, setCurrentId] = useState<string | null>(null)
@@ -133,6 +149,28 @@ export default function App() {
             >
               {fi.print.button}
             </button>
+            <span className="help-anchor">
+              <button
+                type="button"
+                className="mode-toggle__btn mode-toggle__btn--solo"
+                onClick={openHelp}
+              >
+                {fi.help.button}
+              </button>
+              {showNudge && (
+                <div className="help-nudge" role="status">
+                  <span className="help-nudge__text">{fi.help.nudge}</span>
+                  <button
+                    type="button"
+                    className="help-nudge__close"
+                    aria-label={fi.help.close}
+                    onClick={dismissNudge}
+                  >
+                    ×
+                  </button>
+                </div>
+              )}
+            </span>
           </div>
         </header>
 
@@ -163,6 +201,8 @@ export default function App() {
       {printOpen && (
         <PrintView puzzle={puzzle} onClose={() => setPrintOpen(false)} />
       )}
+
+      {helpOpen && <HelpOverlay onClose={() => setHelpOpen(false)} />}
     </>
   )
 }
