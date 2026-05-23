@@ -172,6 +172,16 @@ body {
   margin-bottom: var(--sp-4);
 }
 
+.solve__timer {
+  margin-left: auto;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--mid-green);
+  font-variant-numeric: tabular-nums;
+}
+
 .solve__done {
   margin-bottom: var(--sp-4);
   padding: var(--sp-3) var(--sp-4);

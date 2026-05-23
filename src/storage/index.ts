@@ -20,8 +20,13 @@ export { downloadPuzzle, readPuzzleFile } from './file'
 
 export {
   clearSolveState,
+  clearSolveTimer,
   loadSolveState,
+  loadSolveTimer,
   saveSolveState,
+  saveSolveTimer,
   solveStateKey,
+  solveTimerKey,
   type SolveState,
+  type SolveTimer,
 } from './solveState'

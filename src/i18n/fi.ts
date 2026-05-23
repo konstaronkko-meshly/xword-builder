@@ -83,6 +83,9 @@ export const fi = {
       clear: 'Tyhjennä',
       completed: 'Valmis! Ristikko on oikein.',
     },
+    timer: {
+      label: 'Aika',
+    },
   },
 } as const
 

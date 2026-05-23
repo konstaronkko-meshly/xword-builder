@@ -4,7 +4,12 @@ import { useGridEntry } from '../components/useGridEntry'
 import { fi } from '../i18n/fi'
 import { isComplete, wrongCells } from '../logic'
 import { getCell, isLetterCell, type Coord, type Puzzle } from '../model'
-import { loadSolveState, saveSolveState } from '../storage'
+import {
+  loadSolveState,
+  loadSolveTimer,
+  saveSolveState,
+  saveSolveTimer,
+} from '../storage'
 
 interface SolveModeProps {
   puzzle: Puzzle
@@ -16,6 +21,16 @@ const coordOf = (key: string): Coord => {
   return { row, col }
 }
 
+/** Format seconds as mm:ss (or h:mm:ss past an hour). */
+function formatTime(totalSec: number): string {
+  const s = totalSec % 60
+  const m = Math.floor(totalSec / 60) % 60
+  const h = Math.floor(totalSec / 3600)
+  const mm = `${m}`.padStart(2, '0')
+  const ss = `${s}`.padStart(2, '0')
+  return h > 0 ? `${h}:${mm}:${ss}` : `${mm}:${ss}`
+}
+
 export function SolveMode({ puzzle }: SolveModeProps) {
   // Entered letters by `${row}-${col}` key, resumed from localStorage on mount.
   // The puzzle's solution is read only for check/reveal/completion, never shown.
@@ -23,6 +38,10 @@ export function SolveMode({ puzzle }: SolveModeProps) {
     () => new Map(Object.entries(loadSolveState(puzzle))),
   )
   const [wrong, setWrong] = useState<Set<string>>(() => new Set())
+  // Solve timer (resumed from its own storage key).
+  const [timer] = useState(() => loadSolveTimer(puzzle))
+  const [elapsedSec, setElapsedSec] = useState(timer.elapsedSec)
+  const [started, setStarted] = useState(timer.started)
   const gridRef = useRef<HTMLDivElement>(null)
 
   // Persist on every change (solve state lives under its own storage key).
@@ -32,6 +51,7 @@ export function SolveMode({ puzzle }: SolveModeProps) {
 
   function setEntry(coord: Coord, letter: string) {
     const key = keyOf(coord)
+    setStarted(true) // first interaction starts the timer
     setEntries((prev) => {
       const next = new Map(prev)
       if (letter === '') next.delete(key)
@@ -60,6 +80,20 @@ export function SolveMode({ puzzle }: SolveModeProps) {
     [puzzle, entries],
   )
 
+  // The timer runs once started and until the puzzle is correctly completed.
+  const timerActive = started && !completed
+
+  useEffect(() => {
+    if (!timerActive) return
+    const id = setInterval(() => setElapsedSec((s) => s + 1), 1000)
+    return () => clearInterval(id)
+  }, [timerActive])
+
+  // Persist timer state (separate key) whenever it changes.
+  useEffect(() => {
+    saveSolveTimer(puzzle, { elapsedSec, started })
+  }, [puzzle, elapsedSec, started])
+
   function check() {
     setWrong(new Set(wrongCells(puzzle, entries).map(keyOf)))
   }
@@ -81,6 +115,8 @@ export function SolveMode({ puzzle }: SolveModeProps) {
   function clearAll() {
     setEntries(new Map())
     setWrong(new Set())
+    setElapsedSec(0)
+    setStarted(false)
   }
 
   const selectedCell = selected ? getCell(puzzle, selected) : undefined
@@ -121,10 +157,16 @@ export function SolveMode({ puzzle }: SolveModeProps) {
         <button type="button" className="btn btn--ghost" onClick={clearAll}>
           {fi.solve.actions.clear}
         </button>
+        <span className="solve__timer">
+          {fi.solve.timer.label}: {formatTime(elapsedSec)}
+        </span>
       </div>
 
       {completed && (
-        <div className="solve__done">{fi.solve.actions.completed}</div>
+        <div className="solve__done">
+          {fi.solve.actions.completed} {fi.solve.timer.label}{' '}
+          {formatTime(elapsedSec)}.
+        </div>
       )}
 
       <div
