@@ -1,11 +1,13 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
+import { cloudflare } from "@cloudflare/vite-plugin";
+
 // base: './' keeps asset paths relative so the static build works when served
 // from a sub-path (e.g. GitHub Pages) — see Phase 4 deployment task.
 // Test config lives in vitest.config.ts.
 export default defineConfig({
-  plugins: [react()],
+  plugins: [react(), cloudflare()],
   base: './',
   build: {
     // Keep the picture-clue icons as separate files instead of inlining the

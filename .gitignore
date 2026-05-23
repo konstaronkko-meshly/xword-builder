@@ -20,3 +20,10 @@ npm-debug.log*
 
 # typescript incremental build info
 *.tsbuildinfo
+
+# wrangler files
+.wrangler
+.dev.vars*
+!.dev.vars.example
+.env*
+!.env.example
