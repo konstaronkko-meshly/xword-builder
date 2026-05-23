@@ -2,12 +2,14 @@ import { useMemo, useState, type KeyboardEvent } from 'react'
 import {
   deriveSlots,
   sameCoord,
+  slotIndexOf,
   slotsForCell,
   stepInSlot,
   type Slot,
 } from '../logic'
 import {
   getCell,
+  isClueCell,
   isInBounds,
   isLetterCell,
   isValidLetter,
@@ -31,6 +33,13 @@ interface UseGridEntryOptions {
   getLetter: (coord: Coord) => string
   /** Write a letter (already a single uppercase letter, or '' to clear). */
   setLetter: (coord: Coord, letter: string) => void
+  /**
+   * Solve mode: clicking a clue cell focuses the start of its answer (and sets
+   * the typing direction), toggling between the two answers on re-click.
+   * Build mode (default false): clicking a clue cell selects the clue cell
+   * itself so its editor can open.
+   */
+  focusAnswerOnClueClick?: boolean
 }
 
 export interface GridEntry {
@@ -62,6 +71,7 @@ export function useGridEntry({
   gridRef,
   getLetter,
   setLetter,
+  focusAnswerOnClueClick = false,
 }: UseGridEntryOptions): GridEntry {
   const [selected, setSelected] = useState<Coord | null>(null)
   const [direction, setDirection] = useState<Direction>('across')
@@ -85,7 +95,35 @@ export function useGridEntry({
   }
 
   function selectCell(coord: Coord) {
-    if (selected && sameCoord(selected, coord)) {
+    const sel = selected
+    const cell = getCell(puzzle, coord)
+
+    // Solve mode: a clue click jumps to its answer's start (toggling on re-click).
+    if (focusAnswerOnClueClick && cell && isClueCell(cell)) {
+      const owned = slots.filter(
+        (s) => sameCoord(s.clueCoord, coord) && s.cells.length > 0,
+      )
+      if (owned.length > 0) {
+        let inCurrentAnswer = false
+        if (sel) {
+          inCurrentAnswer = owned.some(
+            (s) => s.direction === direction && slotIndexOf(s, sel) >= 0,
+          )
+        }
+        const target =
+          inCurrentAnswer && owned.length > 1
+            ? (owned.find((s) => s.direction !== direction) ?? owned[0])
+            : (owned.find((s) => s.direction === direction) ?? owned[0])
+        setDirection(target.direction)
+        setSelected(target.cells[0])
+        gridRef.current?.focus()
+        return
+      }
+    }
+
+    // Letter/blocked (or clue when not focusing answers): select; re-click
+    // toggles the active across/down direction.
+    if (sel && sameCoord(sel, coord)) {
       setDirection((d) => (d === 'across' ? 'down' : 'across'))
     } else {
       setSelected(coord)

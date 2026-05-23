@@ -60,3 +60,29 @@ describe('SolveMode — keyboard entry', () => {
     expect(container.querySelectorAll('.is-active')).toHaveLength(4)
   })
 })
+
+describe('SolveMode — click clue to focus answer', () => {
+  it('focuses a single-clue cell answer start so typing fills it', () => {
+    const { container } = render(<SolveMode puzzle={createSamplePuzzle()} />)
+    fireEvent.click(cellsOf(container)[11]) // (2,1) clue 'Tervehdys' → answer at (2,2)
+    fireEvent.keyDown(app(container), { key: 'z' })
+    expect(cellsOf(container)[12].textContent).toBe('Z') // (2,2)
+  })
+
+  it('toggles between a two-clue cell across and down answers on re-click', () => {
+    const { container } = render(<SolveMode puzzle={createSamplePuzzle()} />)
+    // (0,0) owns across KISA (start (0,1)) and down VESI (start (1,0)).
+    fireEvent.click(cellsOf(container)[0])
+    fireEvent.keyDown(app(container), { key: 'a' }) // → (0,1)
+    fireEvent.click(cellsOf(container)[0]) // selection still in across answer → toggle to down
+    fireEvent.keyDown(app(container), { key: 'b' }) // → (1,0)
+    expect(cellsOf(container)[1].textContent).toBe('A') // (0,1)
+    expect(cellsOf(container)[5].textContent).toBe('B') // (1,0)
+  })
+
+  it('highlights the clicked clue answer slot', () => {
+    const { container } = render(<SolveMode puzzle={createSamplePuzzle()} />)
+    fireEvent.click(cellsOf(container)[0]) // → across KISA, 4 cells
+    expect(container.querySelectorAll('.is-active')).toHaveLength(4)
+  })
+})

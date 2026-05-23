@@ -19,6 +19,7 @@ export function SolveMode({ puzzle }: SolveModeProps) {
   const { selected, activeSlot, selectCell, handleKeyDown } = useGridEntry({
     puzzle,
     gridRef,
+    focusAnswerOnClueClick: true,
     getLetter: (coord) => entries.get(keyOf(coord)) ?? '',
     setLetter: (coord, letter) =>
       setEntries((prev) => {
