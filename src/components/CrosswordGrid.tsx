@@ -31,6 +31,8 @@ interface CrosswordGridProps {
   highlighted?: ReadonlyArray<Coord>
   /** Cells with a validation issue, flagged with a warning marker. */
   warnings?: ReadonlyArray<Coord>
+  /** Solution-word (ratkaisusana) cells — clueless slots, highlighted. */
+  solutionCells?: ReadonlyArray<Coord>
   /**
    * Whether letter cells show their solution. Build mode: true (default).
    * Solve mode: false — letter cells show `entries` instead, never the answer.
@@ -57,6 +59,7 @@ export function CrosswordGrid({
   onSelectCell,
   highlighted = [],
   warnings = [],
+  solutionCells = [],
   showSolutions = true,
   entries,
   wrong = [],
@@ -64,6 +67,7 @@ export function CrosswordGrid({
   const highlightedKeys = new Set(highlighted.map(coordKey))
   const warningKeys = new Set(warnings.map(coordKey))
   const wrongKeys = new Set(wrong.map(coordKey))
+  const solutionKeys = new Set(solutionCells.map(coordKey))
 
   return (
     <div
@@ -96,6 +100,7 @@ export function CrosswordGrid({
               active={highlightedKeys.has(key)}
               warning={warningKeys.has(key)}
               wrong={wrongKeys.has(key)}
+              solution={solutionKeys.has(key)}
               onSelect={
                 onSelectCell
                   ? () => onSelectCell({ row: r, col: c })
@@ -130,6 +135,7 @@ interface CellViewProps {
   active: boolean
   warning: boolean
   wrong: boolean
+  solution: boolean
   onSelect?: () => void
 }
 
@@ -141,10 +147,12 @@ function CellView({
   active,
   warning,
   wrong,
+  solution,
   onSelect,
 }: CellViewProps) {
   const className =
     `xcell xcell--${cell.type}` +
+    (solution ? ' is-solution' : '') +
     (active ? ' is-active' : '') +
     (selected ? ' is-selected' : '') +
     (warning ? ' is-warning' : '') +

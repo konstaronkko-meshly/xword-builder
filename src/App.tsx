@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react'
 import { fi } from './i18n/fi'
 import { ModeToggle, type Mode } from './components/ModeToggle'
 import { PuzzleLibrary } from './components/PuzzleLibrary'
+import { PrintView } from './components/PrintView'
 import { BuildMode } from './modes/BuildMode'
 import { SolveMode } from './modes/SolveMode'
 import { createDefaultPuzzle } from './fixtures/defaultPuzzle'
@@ -23,6 +24,7 @@ export default function App() {
   // accident; authoring is an explicit switch to build mode (or "New").
   const [mode, setMode] = useState<Mode>('solve')
   const [libraryOpen, setLibraryOpen] = useState(false)
+  const [printOpen, setPrintOpen] = useState(false)
   // The working puzzle (lifted here) and the storage id it was loaded/saved as.
   const [puzzle, setPuzzle] = useState(createDefaultPuzzle)
   const [currentId, setCurrentId] = useState<string | null>(null)
@@ -107,47 +109,60 @@ export default function App() {
   }
 
   return (
-    <div className="app">
-      <header className="app__bar">
-        <div className="app__brand">
-          <h1 className="app__title">{fi.appTitle}</h1>
-          <span className="app__tagline">{fi.appTagline}</span>
-        </div>
-        <div className="app__nav">
-          <ModeToggle mode={mode} onChange={selectMode} />
-          <button
-            type="button"
-            className={`mode-toggle__btn mode-toggle__btn--solo${libraryOpen ? ' is-active' : ''}`}
-            aria-pressed={libraryOpen}
-            onClick={() => setLibraryOpen(true)}
-          >
-            {fi.mode.library}
-          </button>
-        </div>
-      </header>
+    <>
+      <div className="app">
+        <header className="app__bar">
+          <div className="app__brand">
+            <h1 className="app__title">{fi.appTitle}</h1>
+            <span className="app__tagline">{fi.appTagline}</span>
+          </div>
+          <div className="app__nav">
+            <ModeToggle mode={mode} onChange={selectMode} />
+            <button
+              type="button"
+              className={`mode-toggle__btn mode-toggle__btn--solo${libraryOpen ? ' is-active' : ''}`}
+              aria-pressed={libraryOpen}
+              onClick={() => setLibraryOpen(true)}
+            >
+              {fi.mode.library}
+            </button>
+            <button
+              type="button"
+              className="mode-toggle__btn mode-toggle__btn--solo"
+              onClick={() => setPrintOpen(true)}
+            >
+              {fi.print.button}
+            </button>
+          </div>
+        </header>
 
-      <main className="app__main">
-        {libraryOpen ? (
-          <PuzzleLibrary
-            saved={saved}
-            currentTitle={puzzle.title}
-            importError={importError}
-            onSaveCurrent={saveCurrent}
-            onExportCurrent={exportCurrent}
-            onNew={newPuzzle}
-            onImport={importFile}
-            onOpen={openSaved}
-            onDuplicate={duplicateSaved}
-            onRename={renameSaved}
-            onDelete={deleteSaved}
-            onExport={exportSaved}
-          />
-        ) : mode === 'build' ? (
-          <BuildMode puzzle={puzzle} setPuzzle={setPuzzle} />
-        ) : (
-          <SolveMode puzzle={puzzle} />
-        )}
-      </main>
-    </div>
+        <main className="app__main">
+          {libraryOpen ? (
+            <PuzzleLibrary
+              saved={saved}
+              currentTitle={puzzle.title}
+              importError={importError}
+              onSaveCurrent={saveCurrent}
+              onExportCurrent={exportCurrent}
+              onNew={newPuzzle}
+              onImport={importFile}
+              onOpen={openSaved}
+              onDuplicate={duplicateSaved}
+              onRename={renameSaved}
+              onDelete={deleteSaved}
+              onExport={exportSaved}
+            />
+          ) : mode === 'build' ? (
+            <BuildMode puzzle={puzzle} setPuzzle={setPuzzle} />
+          ) : (
+            <SolveMode puzzle={puzzle} />
+          )}
+        </main>
+      </div>
+
+      {printOpen && (
+        <PrintView puzzle={puzzle} onClose={() => setPrintOpen(false)} />
+      )}
+    </>
   )
 }

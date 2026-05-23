@@ -59,6 +59,18 @@ describe('CrosswordGrid', () => {
     expect(onSelect).toHaveBeenCalledWith({ row: 1, col: 1 })
   })
 
+  it('marks solution-word cells with is-solution', () => {
+    const { container } = render(
+      <CrosswordGrid
+        puzzle={createEmptyPuzzle(2, 2)}
+        solutionCells={[{ row: 1, col: 1 }]}
+      />,
+    )
+    const cells = container.querySelectorAll('[role="gridcell"]')
+    expect(cells[3].className).toContain('is-solution') // row 1, col 1
+    expect(cells[0].className).not.toContain('is-solution')
+  })
+
   it('marks the selected cell and stays read-only without a handler', () => {
     const { container, rerender } = render(
       <CrosswordGrid puzzle={createEmptyPuzzle(2, 2)} />,

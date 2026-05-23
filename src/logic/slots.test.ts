@@ -11,9 +11,11 @@ import {
 import {
   arrowDirection,
   deriveSlots,
+  isSolutionSlot,
   slotIndexOf,
   slotSolution,
   slotsForCell,
+  solutionWordCells,
   stepInSlot,
 } from './slots'
 
@@ -136,6 +138,35 @@ describe('slotIndexOf / stepInSlot', () => {
     expect(stepInSlot(slot, { row: 0, col: 3 }, 1)).toBeNull() // last cell
     expect(stepInSlot(slot, { row: 0, col: 1 }, -1)).toBeNull() // first cell
     expect(stepInSlot(slot, { row: 0, col: 0 }, 1)).toBeNull() // not in slot
+  })
+})
+
+describe('solution-word (clueless) slots', () => {
+  it('collects the cells of clueless slots only', () => {
+    // Row 0: a normal across clue "Vihje" → A B.
+    // Row 2: a clueless across clue (empty text) → C D — the solution word.
+    const puzzle = puzzleOf([
+      [makeClueCell([makeClue('Vihje', 'across', 'right')]), L('A'), L('B')],
+      [B(), B(), B()],
+      [makeClueCell([makeClue('', 'across', 'right')]), L('C'), L('D')],
+    ])
+    const slots = deriveSlots(puzzle)
+    const texted = slots.find((s) => s.clue.text === 'Vihje')!
+    const clueless = slots.find((s) => s.clue.text === '')!
+
+    expect(isSolutionSlot(texted)).toBe(false)
+    expect(isSolutionSlot(clueless)).toBe(true)
+    expect(solutionWordCells(slots)).toEqual([
+      { row: 2, col: 1 },
+      { row: 2, col: 2 },
+    ])
+  })
+
+  it('returns no cells when every clue has text', () => {
+    const puzzle = puzzleOf([
+      [makeClueCell([makeClue('Vihje', 'across', 'right')]), L('A'), L('B')],
+    ])
+    expect(solutionWordCells(deriveSlots(puzzle))).toEqual([])
   })
 })
 

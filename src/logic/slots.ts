@@ -150,3 +150,17 @@ export function slotSolution(puzzle: Puzzle, slot: Slot): string {
     })
     .join('')
 }
+
+/**
+ * A "solution word" (ratkaisusana) slot: a clue with an arrow + direction but
+ * NO clue text. Its answer cells are highlighted and solved purely via the
+ * crossing answers — there is no clue of its own to give the word away.
+ */
+export function isSolutionSlot(slot: Slot): boolean {
+  return slot.clue.text.trim() === ''
+}
+
+/** All letter-cell coords belonging to solution-word (clueless) slots. */
+export function solutionWordCells(slots: Slot[]): Coord[] {
+  return slots.filter(isSolutionSlot).flatMap((slot) => slot.cells)
+}

@@ -3,10 +3,12 @@ export type { Slot } from './slots'
 export {
   arrowDirection,
   deriveSlots,
+  isSolutionSlot,
   sameCoord,
   slotIndexOf,
   slotSolution,
   slotsForCell,
+  solutionWordCells,
   stepInSlot,
 } from './slots'
 

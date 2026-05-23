@@ -9,7 +9,7 @@ import { ClueEditor } from '../components/ClueEditor'
 import { CrosswordGrid } from '../components/CrosswordGrid'
 import { useGridEntry } from '../components/useGridEntry'
 import { fi } from '../i18n/fi'
-import { validatePuzzle } from '../logic'
+import { solutionWordCells, validatePuzzle } from '../logic'
 import {
   createEmptyPuzzle,
   getCell,
@@ -284,6 +284,7 @@ export function BuildMode({ puzzle, setPuzzle }: BuildModeProps) {
             onSelectCell={selectCell}
             highlighted={activeSlot?.cells ?? []}
             warnings={issues.map((issue) => issue.coord)}
+            solutionCells={solutionWordCells(slots)}
           />
         </div>
 

@@ -377,7 +377,7 @@
           "type": "clue",
           "clues": [
             {
-              "text": "\"ONE --- PLEASE!\"",
+              "text": "\"EIN --- BITTE!\"",
               "direction": "down",
               "arrow": "down"
             }
@@ -432,6 +432,11 @@
               "text": "TÄTÄ PITKIN",
               "direction": "across",
               "arrow": "right"
+            },
+            {
+              "text": "ESIM. MAHA-KIPU",
+              "direction": "down",
+              "arrow": "down"
             }
           ]
         },
@@ -670,7 +675,7 @@
               "arrow": "right"
             },
             {
-              "text": "EKAT KARKIT",
+              "text": "EX-KAUPPA",
               "direction": "down",
               "arrow": "down"
             }
@@ -959,5 +964,5 @@
     ],
     "author": "KATZZZ"
   },
-  "savedAt": "2026-05-23T14:49:07.650Z"
+  "savedAt": "2026-05-23T15:52:50.263Z"
 }
