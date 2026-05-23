@@ -78,3 +78,11 @@ npx wrangler pages deploy dist --project-name=<your-project-name>
   config is needed. If routing is added later, add `public/_redirects` with
   `/* /index.html 200`.
 - `vite.config.ts` uses `base: './'`, which works at the `*.pages.dev` root.
+
+## Credits
+
+Picture-clue icons are a curated subset of [OpenMoji](https://openmoji.org)
+(color SVGs), licensed under
+[CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/). The bundled
+files live under `src/assets/icons/openmoji/`; re-fetch or extend the set with
+`node scripts/fetch-icons.mjs`.
