@@ -36,7 +36,7 @@ export const fi = {
   build: {
     eyebrow: 'Rakennustila',
     editHint:
-      'Valitse ruutu ja kirjoita kirjaimet näppäimistöllä. Nuolet siirtävät, 1–3 vaihtavat tyypin, sama ruutu vaihtaa suunnan.',
+      'Valitse ruutu napauttamalla ja kirjoita kirjaimet. Näppäinkomennot ja symbolit löytyvät Ohjeesta.',
     tools: {
       label: 'Ruututyökalut',
       gridLabel: 'Ristikon ruudukko',
@@ -78,7 +78,7 @@ export const fi = {
   },
   solve: {
     eyebrow: 'Ratkaisutila',
-    hint: 'Lue vihjeet ruuduista ja täytä kirjaimet. Vastaukset eivät näy.',
+    hint: 'Lue vihjeet ruuduista ja täytä kirjaimet — vastaukset eivät näy. Apua saat Ohjeesta.',
     gridLabel: 'Ratkaistava ruudukko',
     actions: {
       label: 'Ratkaisutyökalut',
