@@ -68,6 +68,7 @@ export function CrosswordGrid({
             <CellView
               key={key}
               cell={cell}
+              coordKey={key}
               selected={selected?.row === r && selected.col === c}
               active={highlightedKeys.has(key)}
               warning={warningKeys.has(key)}
@@ -99,6 +100,7 @@ function cellContent(cell: Cell) {
 
 interface CellViewProps {
   cell: Cell
+  coordKey: string
   selected: boolean
   active: boolean
   warning: boolean
@@ -107,6 +109,7 @@ interface CellViewProps {
 
 function CellView({
   cell,
+  coordKey,
   selected,
   active,
   warning,
@@ -123,6 +126,7 @@ function CellView({
     <div
       className={className}
       role="gridcell"
+      data-coord={coordKey}
       aria-selected={onSelect ? selected : undefined}
       onClick={onSelect}
     >

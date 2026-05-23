@@ -3,7 +3,14 @@ import { cleanup, fireEvent, render } from '@testing-library/react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { BuildMode } from './BuildMode'
 
-afterEach(cleanup)
+// jsdom doesn't implement scrollIntoView; stub it so keyboard nav doesn't throw.
+const scrollIntoView = vi.fn()
+Element.prototype.scrollIntoView = scrollIntoView
+
+afterEach(() => {
+  cleanup()
+  scrollIntoView.mockClear()
+})
 
 const cellsOf = (c: HTMLElement) => c.querySelectorAll('[role="gridcell"]')
 const app = (c: HTMLElement) =>
@@ -132,5 +139,21 @@ describe('BuildMode — grid management', () => {
     fireEvent.click(getByText('Tyhjennä'))
     expect(container.querySelectorAll('.xcell--clue')).toHaveLength(0)
     confirm.mockRestore()
+  })
+})
+
+describe('BuildMode — keyboard scroll', () => {
+  it('scrolls the selected cell into view on arrow navigation', () => {
+    const { container } = render(<BuildMode />)
+    fireEvent.click(cellsOf(container)[1]) // select via click (no scroll)
+    scrollIntoView.mockClear()
+    fireEvent.keyDown(app(container), { key: 'ArrowDown' })
+    expect(scrollIntoView).toHaveBeenCalled()
+  })
+
+  it('does not scroll when selecting a cell by click', () => {
+    const { container } = render(<BuildMode />)
+    fireEvent.click(cellsOf(container)[7])
+    expect(scrollIntoView).not.toHaveBeenCalled()
   })
 })

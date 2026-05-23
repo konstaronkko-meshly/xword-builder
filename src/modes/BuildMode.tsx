@@ -1,6 +1,7 @@
 import { useMemo, useRef, useState, type KeyboardEvent } from 'react'
 import { ClueEditor } from '../components/ClueEditor'
 import { CrosswordGrid } from '../components/CrosswordGrid'
+import { scrollCellIntoView } from '../components/gridScroll'
 import { createSamplePuzzle } from '../fixtures/samplePuzzle'
 import { fi } from '../i18n/fi'
 import {
@@ -166,6 +167,13 @@ export function BuildMode() {
     gridRef.current?.focus()
   }
 
+  // Move the selection from the keyboard, keeping the target cell in view.
+  // (Click selection does not scroll — the clicked cell was already visible.)
+  function selectByKeyboard(coord: Coord) {
+    setSelected(coord)
+    scrollCellIntoView(gridRef.current, coord)
+  }
+
   function resize(rows: number, cols: number) {
     if (
       resizeDropsContent(puzzle, rows, cols) &&
@@ -211,7 +219,7 @@ export function BuildMode() {
         row: selected.row + delta.row,
         col: selected.col + delta.col,
       }
-      if (isInBounds(puzzle, next)) setSelected(next)
+      if (isInBounds(puzzle, next)) selectByKeyboard(next)
       return
     }
 
@@ -223,7 +231,7 @@ export function BuildMode() {
       } else if (activeSlot) {
         const prev = stepInSlot(activeSlot, selected, -1)
         if (prev) {
-          setSelected(prev)
+          selectByKeyboard(prev)
           setLetterAt(prev, '')
         }
       }
@@ -239,7 +247,7 @@ export function BuildMode() {
       event.preventDefault()
       setLetterAt(selected, upper)
       const next = activeSlot && stepInSlot(activeSlot, selected, 1)
-      if (next) setSelected(next)
+      if (next) selectByKeyboard(next)
       return
     }
 
