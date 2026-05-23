@@ -1,3 +1,28 @@
-// Puzzle data model & TypeScript types.
-// Implemented in task "Define puzzle data model & TypeScript types".
-export {}
+// Puzzle data model & TypeScript types — public surface.
+export type {
+  Arrow,
+  BlockedCell,
+  Cell,
+  Clue,
+  ClueCell,
+  Coord,
+  Direction,
+  LetterCell,
+  Puzzle,
+} from './types'
+
+export {
+  FINNISH_LETTERS,
+  MAX_CLUES_PER_CELL,
+  isBlockedCell,
+  isClueCell,
+  isLetterCell,
+  isValidLetter,
+  makeBlockedCell,
+  makeClue,
+  makeClueCell,
+  makeLetterCell,
+  normalizeLetter,
+} from './cells'
+
+export { MAX_DIMENSION, createEmptyPuzzle, getCell, isInBounds } from './puzzle'
