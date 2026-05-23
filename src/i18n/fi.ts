@@ -104,6 +104,8 @@ export const fi = {
     button: 'Ohje',
     title: 'Ohje',
     close: 'Sulje',
+    nudge:
+      'Uusi täällä? Katso Ohjeesta, miten ristikkoa rakennetaan ja ratkaistaan.',
     building: {
       title: 'Rakentaminen',
       body: [

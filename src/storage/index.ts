@@ -18,6 +18,8 @@ export {
 
 export { downloadPuzzle, readPuzzleFile } from './file'
 
+export { hasSeenHelp, markHelpSeen } from './prefs'
+
 export {
   clearSolveState,
   clearSolveTimer,
