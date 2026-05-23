@@ -19,7 +19,9 @@ const NEW_PUZZLE_SIZE = 11
 export default function App() {
   const store = useMemo(() => new PuzzleStore(), [])
 
-  const [mode, setMode] = useState<Mode>('build')
+  // Default to the solver so loading a puzzle never reveals its answers by
+  // accident; authoring is an explicit switch to build mode (or "New").
+  const [mode, setMode] = useState<Mode>('solve')
   const [libraryOpen, setLibraryOpen] = useState(false)
   // The working puzzle (lifted here) and the storage id it was loaded/saved as.
   const [puzzle, setPuzzle] = useState(createDefaultPuzzle)
@@ -58,7 +60,7 @@ export default function App() {
       setPuzzle(imported)
       setCurrentId(null)
       setImportError(null)
-      setMode('build')
+      setMode('solve')
       setLibraryOpen(false)
     } catch (error) {
       setImportError(
@@ -72,7 +74,7 @@ export default function App() {
     if (!loaded) return
     setPuzzle(loaded)
     setCurrentId(id)
-    setMode('build')
+    setMode('solve')
     setLibraryOpen(false)
   }
 

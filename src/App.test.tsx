@@ -22,6 +22,8 @@ const rowButton = (item: Element, text: string) =>
 describe('App — puzzle survives the build/solve toggle', () => {
   it('keeps an edit made in build mode when switching to solve mode', () => {
     const { container, getByText } = render(<App />)
+    // The app opens in solve mode; switch to build to make the edit.
+    fireEvent.click(getByText('Rakenna'))
     // Edit the first clue cell (the default puzzle's first cell may be blocked).
     const clueCell = container.querySelector('[role="gridcell"].xcell--clue')!
     fireEvent.click(clueCell)
@@ -45,12 +47,12 @@ describe('App — puzzle library', () => {
     expect(items(container)).toHaveLength(1)
   })
 
-  it('opens a saved puzzle into build mode', () => {
+  it('opens a saved puzzle into solve mode', () => {
     const { container, getByText } = render(<App />)
     openLibrary(getByText)
     fireEvent.click(getByText('Tallenna'))
     fireEvent.click(rowButton(items(container)[0], 'Avaa'))
-    expect(container.querySelector('.build')).toBeTruthy()
+    expect(container.querySelector('.solve')).toBeTruthy()
   })
 
   it('duplicates a saved puzzle with a (kopio) title', () => {
@@ -82,7 +84,7 @@ describe('App — puzzle library', () => {
     confirm.mockRestore()
   })
 
-  it('imports a valid puzzle file into build mode', async () => {
+  it('imports a valid puzzle file into solve mode', async () => {
     const { container, getByText, findByText } = render(<App />)
     openLibrary(getByText)
     const json = serializePuzzle(createEmptyPuzzle(2, 2, 'Tuotu'))
@@ -94,7 +96,8 @@ describe('App — puzzle library', () => {
         files: [new File([json], 'p.json', { type: 'application/json' })],
       },
     })
-    expect(await findByText('Tuotu')).toBeTruthy() // build heading
+    expect(await findByText('Tuotu')).toBeTruthy() // solve heading shows title
+    expect(container.querySelector('.solve')).toBeTruthy()
   })
 
   it('shows a friendly error for an invalid import file', async () => {
