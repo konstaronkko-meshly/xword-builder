@@ -11,6 +11,7 @@ import {
   validatePuzzle,
 } from '../logic'
 import {
+  createEmptyPuzzle,
   getCell,
   isClueCell,
   isInBounds,
@@ -19,8 +20,11 @@ import {
   makeClue,
   makeClueCell,
   makeLetterCell,
+  resizeDropsContent,
+  resizePuzzle,
   setCellType,
   withCell,
+  MAX_DIMENSION,
   type Clue,
   type CellType,
   type Coord,
@@ -31,6 +35,43 @@ const straightArrow = (direction: Direction) =>
   direction === 'across' ? 'right' : 'down'
 
 const CELL_TYPES: readonly CellType[] = ['letter', 'clue', 'blocked']
+
+interface StepperProps {
+  label: string
+  value: number
+  min: number
+  max: number
+  onChange: (value: number) => void
+}
+
+function Stepper({ label, value, min, max, onChange }: StepperProps) {
+  return (
+    <div className="stepper">
+      <span className="stepper__label">{label}</span>
+      <div className="stepper__controls">
+        <button
+          type="button"
+          className="stepper__btn"
+          disabled={value <= min}
+          aria-label={`${label}: ${fi.build.meta.decrease}`}
+          onClick={() => onChange(value - 1)}
+        >
+          −
+        </button>
+        <span className="stepper__value">{value}</span>
+        <button
+          type="button"
+          className="stepper__btn"
+          disabled={value >= max}
+          aria-label={`${label}: ${fi.build.meta.increase}`}
+          onClick={() => onChange(value + 1)}
+        >
+          +
+        </button>
+      </div>
+    </div>
+  )
+}
 
 const ARROW_DELTAS: Record<string, Coord> = {
   ArrowUp: { row: -1, col: 0 },
@@ -125,6 +166,40 @@ export function BuildMode() {
     gridRef.current?.focus()
   }
 
+  function resize(rows: number, cols: number) {
+    if (
+      resizeDropsContent(puzzle, rows, cols) &&
+      !window.confirm(fi.build.meta.confirmResize)
+    ) {
+      return
+    }
+    setPuzzle((p) => resizePuzzle(p, rows, cols))
+    setSelected(null)
+  }
+
+  function newPuzzle() {
+    if (!window.confirm(fi.build.meta.confirmNew)) return
+    setPuzzle((p) => createEmptyPuzzle(p.rows, p.cols))
+    setSelected(null)
+  }
+
+  function clearGrid() {
+    if (!window.confirm(fi.build.meta.confirmClear)) return
+    setPuzzle((p) => ({
+      ...createEmptyPuzzle(p.rows, p.cols, p.title),
+      author: p.author,
+    }))
+    setSelected(null)
+  }
+
+  function changeTitle(title: string) {
+    setPuzzle((p) => ({ ...p, title }))
+  }
+
+  function changeAuthor(author: string) {
+    setPuzzle((p) => ({ ...p, author: author || undefined }))
+  }
+
   function handleKeyDown(event: KeyboardEvent<HTMLDivElement>) {
     if (!selected) return
     const { key } = event
@@ -179,9 +254,48 @@ export function BuildMode() {
     <section className="build">
       <header className="build__head">
         <div className="placeholder__eyebrow">{fi.build.eyebrow}</div>
-        <h2 className="build__title">{puzzle.title}</h2>
+        <h2 className="build__title">{puzzle.title || ' '}</h2>
         <p className="build__hint">{fi.build.editHint}</p>
       </header>
+
+      <div className="build__controls">
+        <label className="field field--grow">
+          <span>{fi.build.meta.title}</span>
+          <input
+            type="text"
+            value={puzzle.title}
+            onChange={(e) => changeTitle(e.target.value)}
+          />
+        </label>
+        <label className="field">
+          <span>{fi.build.meta.author}</span>
+          <input
+            type="text"
+            value={puzzle.author ?? ''}
+            onChange={(e) => changeAuthor(e.target.value)}
+          />
+        </label>
+        <Stepper
+          label={fi.build.meta.rows}
+          value={puzzle.rows}
+          min={1}
+          max={MAX_DIMENSION}
+          onChange={(rows) => resize(rows, puzzle.cols)}
+        />
+        <Stepper
+          label={fi.build.meta.cols}
+          value={puzzle.cols}
+          min={1}
+          max={MAX_DIMENSION}
+          onChange={(cols) => resize(puzzle.rows, cols)}
+        />
+        <button type="button" className="btn btn--ghost" onClick={newPuzzle}>
+          {fi.build.meta.newPuzzle}
+        </button>
+        <button type="button" className="btn btn--ghost" onClick={clearGrid}>
+          {fi.build.meta.clear}
+        </button>
+      </div>
 
       <div
         className="build__toolbar"

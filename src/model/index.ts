@@ -32,6 +32,8 @@ export {
   createEmptyPuzzle,
   getCell,
   isInBounds,
+  resizeDropsContent,
+  resizePuzzle,
   setCellType,
   withCell,
   type CellType,

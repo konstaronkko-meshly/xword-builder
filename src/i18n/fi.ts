@@ -35,6 +35,20 @@ export const fi = {
       remove: 'Poista vihje',
       empty: 'Ei vihjeitä. Lisää enintään kaksi.',
     },
+    meta: {
+      title: 'Otsikko',
+      author: 'Tekijä',
+      rows: 'Rivit',
+      cols: 'Sarakkeet',
+      decrease: 'vähennä',
+      increase: 'lisää',
+      newPuzzle: 'Uusi',
+      clear: 'Tyhjennä',
+      confirmResize: 'Pienennys poistaa ruutuja sisältöineen. Jatketaanko?',
+      confirmNew:
+        'Aloitetaanko uusi tyhjä ristikko? Nykyinen sisältö poistetaan.',
+      confirmClear: 'Tyhjennetäänkö ruudukko? Kaikki ruudut nollataan.',
+    },
   },
   solve: {
     eyebrow: 'Ratkaisutila',

@@ -6,12 +6,15 @@ import {
   isLetterCell,
   makeClue,
   makeClueCell,
+  makeLetterCell,
 } from './cells'
 import {
   MAX_DIMENSION,
   createEmptyPuzzle,
   getCell,
   isInBounds,
+  resizeDropsContent,
+  resizePuzzle,
   setCellType,
   withCell,
 } from './puzzle'
@@ -108,5 +111,57 @@ describe('setCellType', () => {
 
     const blocked = setCellType(puzzle, { row: 0, col: 0 }, 'blocked')
     expect(deriveSlots(blocked)).toHaveLength(0)
+  })
+})
+
+describe('resizePuzzle', () => {
+  const start = withCell(
+    withCell(
+      createEmptyPuzzle(2, 2, 'T'),
+      { row: 0, col: 0 },
+      makeLetterCell('A'),
+    ),
+    { row: 1, col: 1 },
+    makeClueCell([makeClue('Vihje', 'across', 'right')]),
+  )
+
+  it('grows the grid, preserving content and filling empties', () => {
+    const bigger = resizePuzzle(start, 3, 4)
+    expect(bigger).toMatchObject({ rows: 3, cols: 4 })
+    expect(bigger.cells[0][0]).toEqual({ type: 'letter', solution: 'A' }) // kept
+    expect(isClueCell(bigger.cells[1][1])).toBe(true) // kept
+    expect(bigger.cells[2][3]).toEqual({ type: 'letter', solution: '' }) // new
+  })
+
+  it('shrinks the grid, dropping out-of-bounds cells', () => {
+    const smaller = resizePuzzle(start, 1, 1)
+    expect(smaller).toMatchObject({ rows: 1, cols: 1 })
+    expect(smaller.cells).toHaveLength(1)
+    expect(smaller.cells[0][0]).toEqual({ type: 'letter', solution: 'A' })
+  })
+
+  it('rejects invalid dimensions', () => {
+    expect(() => resizePuzzle(start, 0, 2)).toThrow(RangeError)
+    expect(() => resizePuzzle(start, 2, MAX_DIMENSION + 1)).toThrow(RangeError)
+  })
+})
+
+describe('resizeDropsContent', () => {
+  const puzzle = withCell(
+    createEmptyPuzzle(2, 2),
+    { row: 1, col: 1 },
+    makeLetterCell('X'),
+  )
+
+  it('is false when growing or when only empty cells are dropped', () => {
+    expect(resizeDropsContent(puzzle, 3, 3)).toBe(false)
+    // Dropping row 0 (all empty) and keeping (1,1) is not possible by shrink,
+    // but shrinking to 2x1 drops col 1 which holds 'X' → true (checked below).
+    const onlyEmpty = createEmptyPuzzle(2, 2)
+    expect(resizeDropsContent(onlyEmpty, 1, 1)).toBe(false)
+  })
+
+  it('is true when a content cell would be dropped', () => {
+    expect(resizeDropsContent(puzzle, 1, 1)).toBe(true) // drops (1,1)='X'
   })
 })

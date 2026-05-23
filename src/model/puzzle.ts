@@ -1,4 +1,9 @@
-import { makeBlockedCell, makeClueCell, makeLetterCell } from './cells'
+import {
+  isLetterCell,
+  makeBlockedCell,
+  makeClueCell,
+  makeLetterCell,
+} from './cells'
 import type { Cell, Coord, Puzzle } from './types'
 
 /** A cell's variant tag. */
@@ -74,4 +79,51 @@ export function setCellType(
         ? makeClueCell()
         : makeBlockedCell()
   return withCell(puzzle, coord, cell)
+}
+
+/** A cell that carries no authored content (an empty letter cell). */
+function isEmptyCell(cell: Cell): boolean {
+  return isLetterCell(cell) && cell.solution === ''
+}
+
+/**
+ * Resize the grid, returning a new puzzle. In-bounds cells are preserved;
+ * new positions are filled with empty letter cells; cells outside the new
+ * dimensions are dropped.
+ */
+export function resizePuzzle(
+  puzzle: Puzzle,
+  rows: number,
+  cols: number,
+): Puzzle {
+  assertDimension(rows, 'rows')
+  assertDimension(cols, 'cols')
+  const cells: Cell[][] = Array.from({ length: rows }, (_, r) =>
+    Array.from({ length: cols }, (_, c) =>
+      r < puzzle.rows && c < puzzle.cols
+        ? puzzle.cells[r][c]
+        : makeLetterCell(),
+    ),
+  )
+  return { ...puzzle, rows, cols, cells }
+}
+
+/**
+ * True if resizing to `rows`×`cols` would drop any cell that carries authored
+ * content (a clue cell, a blocked cell, or a letter with a solution) — i.e.
+ * the UI should confirm before applying the resize.
+ */
+export function resizeDropsContent(
+  puzzle: Puzzle,
+  rows: number,
+  cols: number,
+): boolean {
+  for (let r = 0; r < puzzle.rows; r++) {
+    for (let c = 0; c < puzzle.cols; c++) {
+      if ((r >= rows || c >= cols) && !isEmptyCell(puzzle.cells[r][c])) {
+        return true
+      }
+    }
+  }
+  return false
 }

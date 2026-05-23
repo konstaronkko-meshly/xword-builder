@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 import { cleanup, fireEvent, render } from '@testing-library/react'
-import { afterEach, describe, expect, it } from 'vitest'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 import { BuildMode } from './BuildMode'
 
 afterEach(cleanup)
@@ -90,5 +90,47 @@ describe('BuildMode — clue editor', () => {
     const removeButtons = container.querySelectorAll('.clue-row__remove')
     fireEvent.click(removeButtons[0])
     expect(container.querySelectorAll('.clue-row')).toHaveLength(1)
+  })
+})
+
+describe('BuildMode — grid management', () => {
+  const stepperBtns = (c: HTMLElement, stepperIndex: number) => {
+    const stepper = c.querySelectorAll('.stepper')[stepperIndex]
+    return stepper.querySelectorAll('.stepper__btn')
+  }
+
+  it('grows the grid when increasing rows (no content dropped, no confirm)', () => {
+    const { container } = render(<BuildMode />)
+    expect(cellsOf(container)).toHaveLength(25) // 5×5
+    fireEvent.click(stepperBtns(container, 0)[1]) // rows +
+    expect(cellsOf(container)).toHaveLength(30) // 6×5
+  })
+
+  it('confirms before a resize that would drop content', () => {
+    const confirm = vi.spyOn(window, 'confirm').mockReturnValue(false)
+    const { container } = render(<BuildMode />)
+    fireEvent.click(stepperBtns(container, 1)[0]) // cols − would drop column 4
+    expect(confirm).toHaveBeenCalled()
+    expect(cellsOf(container)).toHaveLength(25) // declined → unchanged
+    confirm.mockRestore()
+  })
+
+  it('edits the title, reflected in the heading', () => {
+    const { container, getByDisplayValue } = render(<BuildMode />)
+    fireEvent.change(getByDisplayValue('Esimerkkiristikko'), {
+      target: { value: 'Oma ristikko' },
+    })
+    expect(container.querySelector('.build__title')?.textContent).toBe(
+      'Oma ristikko',
+    )
+  })
+
+  it('clears the grid after confirmation', () => {
+    const confirm = vi.spyOn(window, 'confirm').mockReturnValue(true)
+    const { container, getByText } = render(<BuildMode />)
+    expect(container.querySelectorAll('.xcell--clue').length).toBeGreaterThan(0)
+    fireEvent.click(getByText('Tyhjennä'))
+    expect(container.querySelectorAll('.xcell--clue')).toHaveLength(0)
+    confirm.mockRestore()
   })
 })
