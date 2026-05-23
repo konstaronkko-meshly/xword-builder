@@ -1,4 +1,5 @@
 import { useMemo, useRef, useState, type KeyboardEvent } from 'react'
+import { ClueEditor } from '../components/ClueEditor'
 import { CrosswordGrid } from '../components/CrosswordGrid'
 import { createSamplePuzzle } from '../fixtures/samplePuzzle'
 import { fi } from '../i18n/fi'
@@ -11,16 +12,23 @@ import {
 } from '../logic'
 import {
   getCell,
+  isClueCell,
   isInBounds,
   isLetterCell,
   isValidLetter,
+  makeClue,
+  makeClueCell,
   makeLetterCell,
   setCellType,
   withCell,
+  type Clue,
   type CellType,
   type Coord,
   type Direction,
 } from '../model'
+
+const straightArrow = (direction: Direction) =>
+  direction === 'across' ? 'right' : 'down'
 
 const CELL_TYPES: readonly CellType[] = ['letter', 'clue', 'blocked']
 
@@ -57,6 +65,54 @@ export function BuildMode() {
 
   function setLetterAt(coord: Coord, letter: string) {
     setPuzzle((p) => withCell(p, coord, makeLetterCell(letter)))
+  }
+
+  const selectedCell = selected ? getCell(puzzle, selected) : undefined
+  const clueCell =
+    selectedCell && isClueCell(selectedCell) ? selectedCell : undefined
+
+  function setClues(clues: Clue[]) {
+    if (selected) setPuzzle((p) => withCell(p, selected, makeClueCell(clues)))
+  }
+
+  function addClue() {
+    if (!clueCell) return
+    const direction: Direction = clueCell.clues.some(
+      (c) => c.direction === 'across',
+    )
+      ? 'down'
+      : 'across'
+    setClues([
+      ...clueCell.clues,
+      makeClue('', direction, straightArrow(direction)),
+    ])
+  }
+
+  function removeClue(index: number) {
+    if (clueCell) setClues(clueCell.clues.filter((_, j) => j !== index))
+  }
+
+  function changeClueText(index: number, text: string) {
+    if (!clueCell) return
+    setClues(
+      clueCell.clues.map((c, j) =>
+        j === index ? makeClue(text, c.direction, c.arrow) : c,
+      ),
+    )
+  }
+
+  function changeClueDirection(index: number, direction: Direction) {
+    if (!clueCell) return
+    if (
+      clueCell.clues.some((c, j) => j !== index && c.direction === direction)
+    ) {
+      return // direction already used by the other clue
+    }
+    setClues(
+      clueCell.clues.map((c, j) =>
+        j === index ? makeClue(c.text, direction, straightArrow(direction)) : c,
+      ),
+    )
   }
 
   function selectCell(coord: Coord) {
@@ -154,21 +210,35 @@ export function BuildMode() {
         </span>
       </div>
 
-      <div
-        ref={gridRef}
-        className="build__grid"
-        tabIndex={0}
-        role="application"
-        aria-label={fi.build.tools.gridLabel}
-        onKeyDown={handleKeyDown}
-      >
-        <CrosswordGrid
-          puzzle={puzzle}
-          selected={selected}
-          onSelectCell={selectCell}
-          highlighted={activeSlot?.cells ?? []}
-          warnings={issues.map((issue) => issue.coord)}
-        />
+      <div className="build__layout">
+        <div
+          ref={gridRef}
+          className="build__grid"
+          tabIndex={0}
+          role="application"
+          aria-label={fi.build.tools.gridLabel}
+          onKeyDown={handleKeyDown}
+        >
+          <CrosswordGrid
+            puzzle={puzzle}
+            selected={selected}
+            onSelectCell={selectCell}
+            highlighted={activeSlot?.cells ?? []}
+            warnings={issues.map((issue) => issue.coord)}
+          />
+        </div>
+
+        {clueCell && (
+          <aside className="build__panel">
+            <ClueEditor
+              clues={clueCell.clues}
+              onAdd={addClue}
+              onRemove={removeClue}
+              onTextChange={changeClueText}
+              onDirectionChange={changeClueDirection}
+            />
+          </aside>
+        )}
       </div>
     </section>
   )

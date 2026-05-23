@@ -57,3 +57,38 @@ describe('BuildMode — active slot highlight', () => {
     expect(container.querySelectorAll('.is-warning').length).toBeGreaterThan(0)
   })
 })
+
+describe('BuildMode — clue editor', () => {
+  it('shows the editor only for clue cells', () => {
+    const { container } = render(<BuildMode />)
+    fireEvent.click(cellsOf(container)[1]) // (0,1) is a letter cell
+    expect(container.querySelector('.clue-editor')).toBeNull()
+
+    fireEvent.click(cellsOf(container)[0]) // (0,0) clue cell has two clues
+    expect(container.querySelectorAll('.clue-row')).toHaveLength(2)
+  })
+
+  it('edits a clue text and reflects it in the grid cell', () => {
+    const { container } = render(<BuildMode />)
+    fireEvent.click(cellsOf(container)[0]) // (0,0) clue cell
+    const input = container.querySelector('.clue-row__text') as HTMLInputElement
+    fireEvent.change(input, { target: { value: 'Uusi vihje' } })
+    expect(cellsOf(container)[0].textContent).toContain('Uusi vihje')
+  })
+
+  it('adds a second clue to a one-clue cell', () => {
+    const { container, getByText } = render(<BuildMode />)
+    fireEvent.click(cellsOf(container)[11]) // (2,1) clue cell, one across clue
+    expect(container.querySelectorAll('.clue-row')).toHaveLength(1)
+    fireEvent.click(getByText('Lisää vihje'))
+    expect(container.querySelectorAll('.clue-row')).toHaveLength(2)
+  })
+
+  it('removes a clue', () => {
+    const { container } = render(<BuildMode />)
+    fireEvent.click(cellsOf(container)[0]) // (0,0) clue cell, two clues
+    const removeButtons = container.querySelectorAll('.clue-row__remove')
+    fireEvent.click(removeButtons[0])
+    expect(container.querySelectorAll('.clue-row')).toHaveLength(1)
+  })
+})

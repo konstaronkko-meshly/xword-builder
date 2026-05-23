@@ -1,0 +1,81 @@
+/* Clue editor panel. Tokens from src/styles/tokens.css. */
+
+.clue-editor__title {
+  margin: 0 0 var(--sp-4);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--mid-green);
+}
+
+.clue-editor__empty {
+  margin: 0 0 var(--sp-4);
+  font-size: 13px;
+  color: var(--mid-green);
+}
+
+.clue-row {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  margin-bottom: var(--sp-3);
+}
+
+.clue-row__dirs {
+  display: inline-flex;
+  gap: 2px;
+}
+
+.dir-btn {
+  width: 28px;
+  height: 28px;
+  border-radius: var(--r-sm);
+  border: 1px solid rgba(28, 40, 29, 0.2);
+  background: var(--pale-green);
+  color: var(--dark-green);
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 120ms ease;
+}
+
+.dir-btn.is-active {
+  background: var(--terminal-green);
+  border-color: var(--terminal-green);
+}
+
+.dir-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.clue-row__text {
+  flex: 1;
+  min-width: 0;
+  padding: var(--sp-2);
+  border: 1px solid rgba(28, 40, 29, 0.2);
+  border-radius: var(--r-sm);
+  font-family: var(--font-sans);
+  font-size: 13px;
+  color: var(--dark-green);
+  background: var(--pure-white);
+}
+
+.clue-row__text:focus-visible {
+  outline: 2px solid var(--terminal-green);
+  outline-offset: 1px;
+}
+
+.clue-row__remove {
+  border: 0;
+  background: none;
+  color: var(--mid-green);
+  font-size: 18px;
+  line-height: 1;
+  padding: 0 var(--sp-1);
+  cursor: pointer;
+}
+
+.clue-row__remove:hover {
+  color: var(--grey-orange);
+}

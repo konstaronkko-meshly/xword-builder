@@ -25,6 +25,16 @@ export const fi = {
       slots: 'Sanoja',
       warnings: 'Varoituksia',
     },
+    clueEditor: {
+      title: 'Vihjeet',
+      direction: 'Suunta',
+      across: 'Vaakaan',
+      down: 'Alas',
+      text: 'Vihjeteksti',
+      add: 'Lisää vihje',
+      remove: 'Poista vihje',
+      empty: 'Ei vihjeitä. Lisää enintään kaksi.',
+    },
   },
   solve: {
     eyebrow: 'Ratkaisutila',
