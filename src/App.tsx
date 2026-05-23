@@ -4,7 +4,7 @@ import { ModeToggle, type Mode } from './components/ModeToggle'
 import { PuzzleLibrary } from './components/PuzzleLibrary'
 import { BuildMode } from './modes/BuildMode'
 import { SolveMode } from './modes/SolveMode'
-import { createSamplePuzzle } from './fixtures/samplePuzzle'
+import { createDefaultPuzzle } from './fixtures/defaultPuzzle'
 import { createEmptyPuzzle } from './model'
 import {
   PuzzleParseError,
@@ -19,10 +19,12 @@ const NEW_PUZZLE_SIZE = 11
 export default function App() {
   const store = useMemo(() => new PuzzleStore(), [])
 
-  const [mode, setMode] = useState<Mode>('build')
+  // Default to the solver so loading a puzzle never reveals its answers by
+  // accident; authoring is an explicit switch to build mode (or "New").
+  const [mode, setMode] = useState<Mode>('solve')
   const [libraryOpen, setLibraryOpen] = useState(false)
   // The working puzzle (lifted here) and the storage id it was loaded/saved as.
-  const [puzzle, setPuzzle] = useState(createSamplePuzzle)
+  const [puzzle, setPuzzle] = useState(createDefaultPuzzle)
   const [currentId, setCurrentId] = useState<string | null>(null)
   const [saved, setSaved] = useState<PuzzleSummary[]>(() => store.list())
   const [importError, setImportError] = useState<string | null>(null)
@@ -58,7 +60,7 @@ export default function App() {
       setPuzzle(imported)
       setCurrentId(null)
       setImportError(null)
-      setMode('build')
+      setMode('solve')
       setLibraryOpen(false)
     } catch (error) {
       setImportError(
@@ -72,7 +74,7 @@ export default function App() {
     if (!loaded) return
     setPuzzle(loaded)
     setCurrentId(id)
-    setMode('build')
+    setMode('solve')
     setLibraryOpen(false)
   }
 

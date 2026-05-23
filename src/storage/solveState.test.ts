@@ -2,9 +2,13 @@ import { describe, expect, it } from 'vitest'
 import { createEmptyPuzzle } from '../model'
 import {
   clearSolveState,
+  clearSolveTimer,
   loadSolveState,
+  loadSolveTimer,
   saveSolveState,
+  saveSolveTimer,
   solveStateKey,
+  solveTimerKey,
 } from './solveState'
 
 class MemoryStorage implements Storage {
@@ -68,5 +72,46 @@ describe('solveState storage', () => {
     saveSolveState(puzzle, { '0-0': 'A' }, storage)
     clearSolveState(puzzle, storage)
     expect(loadSolveState(puzzle, storage)).toEqual({})
+  })
+})
+
+describe('solve timer storage', () => {
+  const puzzle = createEmptyPuzzle(2, 2, 'P')
+
+  it('uses a separate key from the solve state', () => {
+    expect(solveTimerKey(puzzle)).not.toBe(solveStateKey(puzzle))
+    expect(solveTimerKey(puzzle)).toContain(solveStateKey(puzzle)) // same namespace
+  })
+
+  it('round-trips a timer', () => {
+    const storage = new MemoryStorage()
+    saveSolveTimer(puzzle, { elapsedSec: 42, started: true }, storage)
+    expect(loadSolveTimer(puzzle, storage)).toEqual({
+      elapsedSec: 42,
+      started: true,
+    })
+  })
+
+  it('returns a zeroed timer when none is stored', () => {
+    expect(loadSolveTimer(puzzle, new MemoryStorage())).toEqual({
+      elapsedSec: 0,
+      started: false,
+    })
+  })
+
+  it('does not persist an unstarted, zeroed timer', () => {
+    const storage = new MemoryStorage()
+    saveSolveTimer(puzzle, { elapsedSec: 0, started: false }, storage)
+    expect(storage.getItem(solveTimerKey(puzzle))).toBeNull()
+  })
+
+  it('clears the timer', () => {
+    const storage = new MemoryStorage()
+    saveSolveTimer(puzzle, { elapsedSec: 10, started: true }, storage)
+    clearSolveTimer(puzzle, storage)
+    expect(loadSolveTimer(puzzle, storage)).toEqual({
+      elapsedSec: 0,
+      started: false,
+    })
   })
 })

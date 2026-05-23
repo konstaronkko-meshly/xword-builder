@@ -82,6 +82,19 @@ describe('cell factories and guards', () => {
     expect(cell.clues).toHaveLength(2)
   })
 
+  it('makeClueCell orders across before down regardless of input order', () => {
+    const cell = makeClueCell([
+      makeClue('Virta', 'down', 'down'),
+      makeClue('Pääkaupunki', 'across', 'right'),
+    ])
+    expect(cell.clues.map((c) => c.direction)).toEqual(['across', 'down'])
+  })
+
+  it('makeClueCell leaves a single-clue cell direction unchanged', () => {
+    const downOnly = makeClueCell([makeClue('Virta', 'down', 'down')])
+    expect(downOnly.clues.map((c) => c.direction)).toEqual(['down'])
+  })
+
   it('makeClueCell copies the input array (no shared reference)', () => {
     const clues = [makeClue('Vihje', 'across', 'right')]
     const cell = makeClueCell(clues)

@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
-import { cleanup, fireEvent, render } from '@testing-library/react'
-import { afterEach, describe, expect, it, vi } from 'vitest'
+import { act, cleanup, fireEvent, render } from '@testing-library/react'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import {
   createEmptyPuzzle,
   makeClue,
@@ -138,7 +138,7 @@ describe('SolveMode — check / reveal / completion / resume', () => {
     fireEvent.click(byText(container, 'Paljasta sana'))
     expect(cellsOf(container)[1].textContent).toBe('K')
     expect(cellsOf(container)[2].textContent).toBe('O')
-    expect(queryByText('Valmis! Ristikko on oikein.')).toBeTruthy()
+    expect(queryByText(/Valmis! Ristikko on oikein\./)).toBeTruthy()
   })
 
   it('resumes entered letters after a remount (persistence)', () => {
@@ -159,5 +159,59 @@ describe('SolveMode — check / reveal / completion / resume', () => {
     fireEvent.keyDown(app(container), { key: 'k' })
     fireEvent.click(byText(container, 'Tyhjennä'))
     expect(cellsOf(container)[1].textContent).toBe('')
+  })
+})
+
+describe('SolveMode — solve timer', () => {
+  beforeEach(() => vi.useFakeTimers())
+  afterEach(() => vi.useRealTimers())
+
+  const timerText = (c: HTMLElement) =>
+    c.querySelector('.solve__timer')?.textContent ?? ''
+
+  it('starts on first entry and ticks each second', () => {
+    const { container } = render(<SolveMode puzzle={tinyPuzzle()} />)
+    expect(timerText(container)).toContain('00:00') // not started yet
+    fireEvent.click(cellsOf(container)[1])
+    fireEvent.keyDown(app(container), { key: 'x' }) // first interaction → starts
+    act(() => {
+      vi.advanceTimersByTime(3000)
+    })
+    expect(timerText(container)).toContain('00:03')
+  })
+
+  it('stops the timer and shows the time in the completion banner', () => {
+    const { container } = render(<SolveMode puzzle={tinyPuzzle()} />)
+    fireEvent.click(cellsOf(container)[1])
+    fireEvent.keyDown(app(container), { key: 'k' }) // K (correct) → starts timer
+    act(() => {
+      vi.advanceTimersByTime(2000)
+    })
+    // Complete the puzzle: type O in (0,2).
+    fireEvent.keyDown(app(container), { key: 'o' })
+    const done = container.querySelector('.solve__done')
+    expect(done?.textContent).toContain('Valmis')
+    expect(done?.textContent).toMatch(/00:0\d/) // time frozen in the banner
+    // Timer no longer advances after completion.
+    const frozen = timerText(container)
+    act(() => {
+      vi.advanceTimersByTime(5000)
+    })
+    expect(timerText(container)).toBe(frozen)
+  })
+
+  it('resumes elapsed time after a remount', () => {
+    const puzzle = tinyPuzzle()
+    const first = render(<SolveMode puzzle={puzzle} />)
+    fireEvent.click(cellsOf(first.container)[1])
+    fireEvent.keyDown(app(first.container), { key: 'x' })
+    act(() => {
+      vi.advanceTimersByTime(4000)
+    })
+    expect(timerText(first.container)).toContain('00:04')
+    first.unmount()
+
+    const second = render(<SolveMode puzzle={puzzle} />)
+    expect(timerText(second.container)).toContain('00:04')
   })
 })

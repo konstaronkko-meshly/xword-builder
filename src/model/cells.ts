@@ -72,6 +72,11 @@ export function makeClue(
 /**
  * Create a clue cell. Enforces the arrow-word invariants:
  * at most {@link MAX_CLUES_PER_CELL} clues, and at most one per direction.
+ *
+ * Clues are stored in canonical {@link DIRECTIONS} order (`across` before
+ * `down`), so a two-clue cell always renders the horizontal clue on top of the
+ * vertical one — regardless of insertion order. Single-clue cells keep their
+ * direction unchanged.
  */
 export function makeClueCell(clues: Clue[] = []): ClueCell {
   if (clues.length > MAX_CLUES_PER_CELL) {
@@ -83,7 +88,10 @@ export function makeClueCell(clues: Clue[] = []): ClueCell {
   if (directions.size !== clues.length) {
     throw new RangeError('A clue cell may hold at most one clue per direction.')
   }
-  return { type: 'clue', clues: [...clues] }
+  const ordered = [...clues].sort(
+    (a, b) => DIRECTIONS.indexOf(a.direction) - DIRECTIONS.indexOf(b.direction),
+  )
+  return { type: 'clue', clues: ordered }
 }
 
 /** Create a blocked (not-in-play) cell. */
