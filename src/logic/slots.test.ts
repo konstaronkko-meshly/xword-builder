@@ -11,8 +11,10 @@ import {
 import {
   arrowDirection,
   deriveSlots,
+  slotIndexOf,
   slotSolution,
   slotsForCell,
+  stepInSlot,
 } from './slots'
 
 /** Build a puzzle from a 2D array of cells. */
@@ -109,6 +111,31 @@ describe('deriveSlots — straight arrows', () => {
       { row: 1, col: 0 },
       { row: 2, col: 0 },
     ])
+  })
+})
+
+describe('slotIndexOf / stepInSlot', () => {
+  const puzzle = puzzleOf([
+    [
+      makeClueCell([makeClue('Vihje', 'across', 'right')]),
+      L('A'),
+      L('B'),
+      L('C'),
+    ],
+  ])
+  const [slot] = deriveSlots(puzzle) // cells (0,1) (0,2) (0,3)
+
+  it('finds a cell index within the slot', () => {
+    expect(slotIndexOf(slot, { row: 0, col: 2 })).toBe(1)
+    expect(slotIndexOf(slot, { row: 0, col: 0 })).toBe(-1) // the clue cell
+  })
+
+  it('steps forward and backward, stopping at the ends', () => {
+    expect(stepInSlot(slot, { row: 0, col: 1 }, 1)).toEqual({ row: 0, col: 2 })
+    expect(stepInSlot(slot, { row: 0, col: 2 }, -1)).toEqual({ row: 0, col: 1 })
+    expect(stepInSlot(slot, { row: 0, col: 3 }, 1)).toBeNull() // last cell
+    expect(stepInSlot(slot, { row: 0, col: 1 }, -1)).toBeNull() // first cell
+    expect(stepInSlot(slot, { row: 0, col: 0 }, 1)).toBeNull() // not in slot
   })
 })
 

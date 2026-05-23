@@ -118,6 +118,26 @@ export function slotsForCell(slots: Slot[], coord: Coord): Slot[] {
   return slots.filter((slot) => slot.cells.some((c) => sameCoord(c, coord)))
 }
 
+/** Index of `coord` within the slot's cells, or -1 if it is not in the slot. */
+export function slotIndexOf(slot: Slot, coord: Coord): number {
+  return slot.cells.findIndex((c) => sameCoord(c, coord))
+}
+
+/**
+ * The cell `delta` steps from `coord` along the slot (e.g. +1 next, -1 prev),
+ * or `null` if that would leave the slot or `coord` is not in it.
+ */
+export function stepInSlot(
+  slot: Slot,
+  coord: Coord,
+  delta: 1 | -1,
+): Coord | null {
+  const i = slotIndexOf(slot, coord)
+  if (i < 0) return null
+  const j = i + delta
+  return j >= 0 && j < slot.cells.length ? slot.cells[j] : null
+}
+
 /**
  * The slot's answer as spelled by the puzzle's solution letters. Empty letter
  * cells contribute `''`, so an unfinished slot yields a shorter string.

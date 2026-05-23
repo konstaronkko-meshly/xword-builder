@@ -15,7 +15,7 @@ export const fi = {
   build: {
     eyebrow: 'Rakennustila',
     editHint:
-      'Valitse ruutu ja aseta sen tyyppi. Nuolinäppäimet siirtävät valintaa, näppäimet 1–3 vaihtavat tyypin.',
+      'Valitse ruutu ja kirjoita kirjaimet näppäimistöllä. Nuolet siirtävät, 1–3 vaihtavat tyypin, sama ruutu vaihtaa suunnan.',
     tools: {
       label: 'Ruututyökalut',
       gridLabel: 'Ristikon ruudukko',
@@ -23,6 +23,7 @@ export const fi = {
       clue: 'Vihje',
       blocked: 'Musta',
       slots: 'Sanoja',
+      warnings: 'Varoituksia',
     },
   },
   solve: {

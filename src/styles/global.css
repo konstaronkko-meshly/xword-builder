@@ -194,6 +194,11 @@ body {
   color: var(--mid-green);
 }
 
+.build__status--warn {
+  margin-left: 0;
+  color: var(--grey-orange);
+}
+
 .build__grid {
   display: flex;
   justify-content: center;

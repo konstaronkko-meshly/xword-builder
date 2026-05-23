@@ -1,43 +1,118 @@
-import { useRef, useState, type KeyboardEvent } from 'react'
+import { useMemo, useRef, useState, type KeyboardEvent } from 'react'
 import { CrosswordGrid } from '../components/CrosswordGrid'
 import { createSamplePuzzle } from '../fixtures/samplePuzzle'
 import { fi } from '../i18n/fi'
-import { deriveSlots } from '../logic'
-import { isInBounds, setCellType, type CellType, type Coord } from '../model'
+import {
+  deriveSlots,
+  sameCoord,
+  slotsForCell,
+  stepInSlot,
+  validatePuzzle,
+} from '../logic'
+import {
+  getCell,
+  isInBounds,
+  isLetterCell,
+  isValidLetter,
+  makeLetterCell,
+  setCellType,
+  withCell,
+  type CellType,
+  type Coord,
+  type Direction,
+} from '../model'
 
 const CELL_TYPES: readonly CellType[] = ['letter', 'clue', 'blocked']
+
+const ARROW_DELTAS: Record<string, Coord> = {
+  ArrowUp: { row: -1, col: 0 },
+  ArrowDown: { row: 1, col: 0 },
+  ArrowLeft: { row: 0, col: -1 },
+  ArrowRight: { row: 0, col: 1 },
+}
 
 export function BuildMode() {
   const [puzzle, setPuzzle] = useState(createSamplePuzzle)
   const [selected, setSelected] = useState<Coord | null>(null)
+  const [direction, setDirection] = useState<Direction>('across')
   const gridRef = useRef<HTMLDivElement>(null)
 
-  const slotCount = deriveSlots(puzzle).length
+  const slots = useMemo(() => deriveSlots(puzzle), [puzzle])
+  const issues = useMemo(() => validatePuzzle(puzzle, slots), [puzzle, slots])
+
+  // The active slot: prefer one passing through the selected cell in the
+  // current direction, else any through it, else one the cell *owns* (clue cell).
+  const activeSlot = useMemo(() => {
+    if (!selected) return undefined
+    const candidates = [
+      ...slotsForCell(slots, selected),
+      ...slots.filter((s) => sameCoord(s.clueCoord, selected)),
+    ]
+    return candidates.find((s) => s.direction === direction) ?? candidates[0]
+  }, [selected, direction, slots])
 
   function applyType(type: CellType) {
     if (selected) setPuzzle((p) => setCellType(p, selected, type))
   }
 
+  function setLetterAt(coord: Coord, letter: string) {
+    setPuzzle((p) => withCell(p, coord, makeLetterCell(letter)))
+  }
+
   function selectCell(coord: Coord) {
-    setSelected(coord)
+    // Re-selecting the same cell toggles the active across/down direction.
+    if (selected && sameCoord(selected, coord)) {
+      setDirection((d) => (d === 'across' ? 'down' : 'across'))
+    } else {
+      setSelected(coord)
+    }
     gridRef.current?.focus()
   }
 
   function handleKeyDown(event: KeyboardEvent<HTMLDivElement>) {
     if (!selected) return
-    const deltas: Record<string, Coord> = {
-      ArrowUp: { row: selected.row - 1, col: selected.col },
-      ArrowDown: { row: selected.row + 1, col: selected.col },
-      ArrowLeft: { row: selected.row, col: selected.col - 1 },
-      ArrowRight: { row: selected.row, col: selected.col + 1 },
-    }
-    const next = deltas[event.key]
-    if (next) {
+    const { key } = event
+
+    const delta = ARROW_DELTAS[key]
+    if (delta) {
       event.preventDefault()
+      const next = {
+        row: selected.row + delta.row,
+        col: selected.col + delta.col,
+      }
       if (isInBounds(puzzle, next)) setSelected(next)
       return
     }
-    const typeIndex = ['1', '2', '3'].indexOf(event.key)
+
+    if (key === 'Backspace') {
+      event.preventDefault()
+      const cell = getCell(puzzle, selected)
+      if (cell && isLetterCell(cell) && cell.solution !== '') {
+        setLetterAt(selected, '')
+      } else if (activeSlot) {
+        const prev = stepInSlot(activeSlot, selected, -1)
+        if (prev) {
+          setSelected(prev)
+          setLetterAt(prev, '')
+        }
+      }
+      return
+    }
+
+    if (event.ctrlKey || event.metaKey || event.altKey || key.length !== 1)
+      return
+
+    const cell = getCell(puzzle, selected)
+    const upper = key.toUpperCase()
+    if (cell && isLetterCell(cell) && isValidLetter(upper)) {
+      event.preventDefault()
+      setLetterAt(selected, upper)
+      const next = activeSlot && stepInSlot(activeSlot, selected, 1)
+      if (next) setSelected(next)
+      return
+    }
+
+    const typeIndex = ['1', '2', '3'].indexOf(key)
     if (typeIndex >= 0) {
       event.preventDefault()
       applyType(CELL_TYPES[typeIndex])
@@ -69,7 +144,13 @@ export function BuildMode() {
           </button>
         ))}
         <span className="build__status">
-          {fi.build.tools.slots}: {slotCount}
+          {fi.build.tools.slots}: {slots.length}
+          {issues.length > 0 && (
+            <span className="build__status build__status--warn">
+              {' · '}
+              {fi.build.tools.warnings}: {issues.length}
+            </span>
+          )}
         </span>
       </div>
 
@@ -85,6 +166,8 @@ export function BuildMode() {
           puzzle={puzzle}
           selected={selected}
           onSelectCell={selectCell}
+          highlighted={activeSlot?.cells ?? []}
+          warnings={issues.map((issue) => issue.coord)}
         />
       </div>
     </section>

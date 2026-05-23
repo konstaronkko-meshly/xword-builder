@@ -11,6 +11,7 @@
 }
 
 .xcell {
+  position: relative;
   width: var(--xgrid-cell);
   height: var(--xgrid-cell);
   display: flex;
@@ -18,6 +19,23 @@
   justify-content: center;
   background: var(--pure-white);
   overflow: hidden;
+}
+
+/* Active word slot highlight (warm tint behind letter cells). */
+.xcell.is-active.xcell--letter {
+  background: var(--cream);
+}
+
+/* Validation issue marker: a small dot in the top-right corner. */
+.xcell.is-warning::after {
+  content: '';
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--grey-orange);
 }
 
 .xcell.is-interactive {

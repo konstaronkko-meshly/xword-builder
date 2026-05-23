@@ -4,8 +4,10 @@ export {
   arrowDirection,
   deriveSlots,
   sameCoord,
+  slotIndexOf,
   slotSolution,
   slotsForCell,
+  stepInSlot,
 } from './slots'
 
 export type { ValidationIssue, ValidationIssueKind } from './validation'
