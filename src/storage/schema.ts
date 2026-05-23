@@ -13,7 +13,14 @@ import {
 } from '../model'
 
 /** Current on-disk schema version. Bump + migrate when the format changes. */
-export const SCHEMA_VERSION = 1
+export const SCHEMA_VERSION = 2
+
+/**
+ * Schema versions this build can read. v2 added the optional picture-clue
+ * `icon` field; that field is additive, so v1 documents (which simply lack it)
+ * parse unchanged — no per-version branching is needed beyond accepting both.
+ */
+const SUPPORTED_VERSIONS: readonly number[] = [1, 2]
 
 /**
  * The serialized form of a puzzle. Solve state is deliberately NOT included —
@@ -45,7 +52,7 @@ function isObject(value: unknown): value is Record<string, unknown> {
 
 function parseClue(raw: unknown, where: string): Clue {
   if (!isObject(raw)) fail(`${where}: clue must be an object.`)
-  const { text, direction, arrow } = raw
+  const { text, direction, arrow, icon } = raw
   if (typeof text !== 'string') fail(`${where}: clue text must be a string.`)
   if (!(DIRECTIONS as readonly string[]).includes(direction as string)) {
     fail(`${where}: invalid clue direction ${JSON.stringify(direction)}.`)
@@ -53,7 +60,21 @@ function parseClue(raw: unknown, where: string): Clue {
   if (!(ARROWS as readonly string[]).includes(arrow as string)) {
     fail(`${where}: invalid clue arrow ${JSON.stringify(arrow)}.`)
   }
-  return makeClue(text, direction as Direction, arrow as Arrow)
+  if (icon !== undefined && typeof icon !== 'string') {
+    fail(`${where}: clue icon must be a string when present.`)
+  }
+  // Membership of `icon` against the icon registry is validated in a later
+  // task; here we guarantee shape + the text/icon-exclusivity invariant.
+  return rebuild(
+    () =>
+      makeClue(
+        text,
+        direction as Direction,
+        arrow as Arrow,
+        icon as string | undefined,
+      ),
+    where,
+  )
 }
 
 /** Run a model factory, converting its invariant errors into parse errors. */
@@ -144,10 +165,10 @@ export function toPuzzleDocument(
  */
 export function fromPuzzleDocument(raw: unknown): Puzzle {
   if (!isObject(raw)) fail('document must be an object.')
-  if (raw.schemaVersion !== SCHEMA_VERSION) {
+  if (!SUPPORTED_VERSIONS.includes(raw.schemaVersion as number)) {
     fail(
       `unsupported schemaVersion ${JSON.stringify(raw.schemaVersion)}; ` +
-        `expected ${SCHEMA_VERSION}.`,
+        `expected one of ${SUPPORTED_VERSIONS.join(', ')}.`,
     )
   }
   return parsePuzzle(raw.puzzle)

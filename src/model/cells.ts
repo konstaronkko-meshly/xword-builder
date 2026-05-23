@@ -60,13 +60,25 @@ export function makeLetterCell(solution = ''): LetterCell {
   return { type: 'letter', solution: normalizeLetter(solution) }
 }
 
-/** Create a clue. */
+/**
+ * Create a clue. A clue is either text or a picture: pass `icon` (an icon id)
+ * for a picture clue, in which case `text` must be empty. Throws if both a
+ * non-empty text and an icon are given.
+ */
 export function makeClue(
   text: string,
   direction: Direction,
   arrow: Arrow,
+  icon?: string,
 ): Clue {
-  return { text, direction, arrow }
+  if (icon && text.trim() !== '') {
+    throw new RangeError(
+      'A clue is either text or an icon, not both — got both text and icon.',
+    )
+  }
+  const clue: Clue = { text, direction, arrow }
+  if (icon) clue.icon = icon
+  return clue
 }
 
 /**

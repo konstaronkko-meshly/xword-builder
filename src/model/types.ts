@@ -19,11 +19,17 @@ export type Direction = 'across' | 'down'
  */
 export type Arrow = 'right' | 'down' | 'down-then-right' | 'right-then-down'
 
-/** A single clue living inside a clue cell. */
+/**
+ * A single clue living inside a clue cell. A clue is EITHER text or a picture:
+ * when `icon` is set (an icon id), `text` is empty, and vice versa. An empty
+ * clue with neither marks a "solution word" (ratkaisusana) — see isSolutionSlot.
+ */
 export interface Clue {
   text: string
   direction: Direction
   arrow: Arrow
+  /** Icon id for a picture clue (mutually exclusive with non-empty `text`). */
+  icon?: string
 }
 
 /** A fillable cell holding one solution letter (`''` = not yet filled). */

@@ -100,6 +100,42 @@ describe('deserialize rejects malformed input', () => {
         cells: [[{ type: 'letter', solution: '7' }]],
       },
     }),
+    'non-string clue icon': JSON.stringify({
+      schemaVersion: 2,
+      puzzle: {
+        title: 'x',
+        rows: 1,
+        cols: 1,
+        cells: [
+          [
+            {
+              type: 'clue',
+              clues: [
+                { text: '', direction: 'across', arrow: 'right', icon: 123 },
+              ],
+            },
+          ],
+        ],
+      },
+    }),
+    'clue with both text and icon': JSON.stringify({
+      schemaVersion: 2,
+      puzzle: {
+        title: 'x',
+        rows: 1,
+        cols: 1,
+        cells: [
+          [
+            {
+              type: 'clue',
+              clues: [
+                { text: 'q', direction: 'across', arrow: 'right', icon: 'cat' },
+              ],
+            },
+          ],
+        ],
+      },
+    }),
   }
 
   for (const [name, json] of Object.entries(cases)) {
@@ -107,4 +143,47 @@ describe('deserialize rejects malformed input', () => {
       expect(() => deserializePuzzle(json)).toThrow(PuzzleParseError)
     })
   }
+})
+
+describe('schema v2 — picture-clue icons', () => {
+  it('round-trips a puzzle with an icon clue', () => {
+    const base = createEmptyPuzzle(1, 3, 'Kuvavihje')
+    const puzzle: Puzzle = {
+      ...base,
+      cells: [
+        [
+          makeClueCell([makeClue('', 'across', 'right', 'cat')]),
+          makeLetterCell('A'),
+          makeLetterCell('B'),
+        ],
+      ],
+    }
+    const restored = deserializePuzzle(serializePuzzle(puzzle))
+    expect(restored).toEqual(puzzle)
+    const cell = restored.cells[0][0]
+    expect(cell.type === 'clue' && cell.clues[0].icon).toBe('cat')
+  })
+
+  it('still loads a v1 document (no icon field)', () => {
+    const json = JSON.stringify({
+      schemaVersion: 1,
+      puzzle: {
+        title: 'Vanha',
+        rows: 1,
+        cols: 2,
+        cells: [
+          [
+            {
+              type: 'clue',
+              clues: [{ text: 'Vihje', direction: 'across', arrow: 'right' }],
+            },
+            { type: 'letter', solution: 'A' },
+          ],
+        ],
+      },
+    })
+    const puzzle = deserializePuzzle(json)
+    const cell = puzzle.cells[0][0]
+    expect(cell.type === 'clue' && 'icon' in cell.clues[0]).toBe(false)
+  })
 })
