@@ -197,6 +197,7 @@ body {
 .solve__grid {
   /* Block + overflow so a grid wider than the viewport scrolls horizontally;
      .xgrid's margin-inline:auto keeps it centered when it fits. */
+  position: relative; /* anchors the hidden .grid-input */
   overflow-x: auto;
   padding: var(--sp-6);
   background: var(--pure-white);
@@ -382,6 +383,7 @@ body {
 .build__grid {
   flex: 1 1 320px;
   min-width: 0; /* allow the flex item to shrink so overflow-x can scroll */
+  position: relative; /* anchors the hidden .grid-input */
   overflow-x: auto;
   padding: var(--sp-6);
   background: var(--pure-white);
@@ -412,6 +414,24 @@ body {
 .build__grid:focus-visible {
   outline: 2px solid var(--terminal-green);
   outline-offset: 2px;
+}
+
+/* Hidden proxy input that holds focus on the selected cell so mobile soft
+   keyboards open. Visually hidden but still focusable (not display:none).
+   16px font-size prevents iOS zoom-on-focus. */
+.grid-input {
+  position: absolute;
+  top: var(--sp-6);
+  left: var(--sp-6);
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  border: 0;
+  opacity: 0;
+  font-size: 16px;
+  background: transparent;
+  caret-color: transparent;
+  pointer-events: none;
 }
 
 @media (max-width: 600px) {

@@ -77,6 +77,25 @@ describe('SolveMode — keyboard entry', () => {
     expect(cellsOf(container)[1].textContent).toBe('')
   })
 
+  it('focuses the hidden input on cell tap (opens the mobile keyboard)', () => {
+    const { container } = render(<SolveMode puzzle={createSamplePuzzle()} />)
+    const input = container.querySelector('.grid-input') as HTMLInputElement
+    expect(input).toBeTruthy()
+    const focusSpy = vi.spyOn(input, 'focus')
+    fireEvent.click(cellsOf(container)[1])
+    expect(focusSpy).toHaveBeenCalled()
+  })
+
+  it('types a letter via the input event (mobile IME path)', () => {
+    const { container } = render(<SolveMode puzzle={createSamplePuzzle()} />)
+    const input = container.querySelector('.grid-input') as HTMLInputElement
+    fireEvent.click(cellsOf(container)[1]) // (0,1), start of across KISA
+    fireEvent.input(input, { target: { value: 'a' } })
+    expect(cellsOf(container)[1].textContent).toBe('A')
+    // The proxy input is kept empty so it never holds stale text.
+    expect(input.value).toBe('')
+  })
+
   it('highlights the active slot', () => {
     const { container } = render(<SolveMode puzzle={createSamplePuzzle()} />)
     fireEvent.click(cellsOf(container)[1]) // across KISA = 4 cells

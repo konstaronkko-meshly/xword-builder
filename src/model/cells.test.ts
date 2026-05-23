@@ -120,4 +120,21 @@ describe('cell factories and guards', () => {
       ]),
     ).toThrow(RangeError)
   })
+
+  it('makeClue stores an icon for a picture clue (empty text)', () => {
+    const clue = makeClue('', 'across', 'right', 'cat')
+    expect(clue.icon).toBe('cat')
+    expect(clue.text).toBe('')
+  })
+
+  it('makeClue omits the icon field when none is given', () => {
+    const clue = makeClue('Kissa', 'across', 'right')
+    expect('icon' in clue).toBe(false)
+  })
+
+  it('makeClue rejects a clue with both text and an icon', () => {
+    expect(() => makeClue('Kissa', 'across', 'right', 'cat')).toThrow(
+      RangeError,
+    )
+  })
 })

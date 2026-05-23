@@ -1,4 +1,11 @@
-import { useMemo, useState, type KeyboardEvent } from 'react'
+import {
+  useMemo,
+  useRef,
+  useState,
+  type FormEvent,
+  type KeyboardEvent,
+  type RefObject,
+} from 'react'
 import {
   deriveSlots,
   sameCoord,
@@ -54,6 +61,18 @@ export interface GridEntry {
   selectCell: (coord: Coord) => void
   /** Key handler for nav/typing. Returns true if it consumed the event. */
   handleKeyDown: (event: KeyboardEvent<HTMLDivElement>) => boolean
+  /**
+   * Input handler for the hidden proxy `<input>` — the mobile path. Soft
+   * keyboards don't fire reliable `keydown` for letters (Android IME sends
+   * keyCode 229), so we also read typed characters from the input event.
+   */
+  handleInput: (event: FormEvent<HTMLDivElement>) => void
+  /**
+   * Ref for the hidden proxy `<input>`. Focusing a real input is what opens the
+   * mobile soft keyboard; tapping a cell focuses it. Render it in the grid
+   * container so its key/input events bubble to the container handlers.
+   */
+  inputRef: RefObject<HTMLInputElement>
 }
 
 /**
@@ -75,6 +94,7 @@ export function useGridEntry({
 }: UseGridEntryOptions): GridEntry {
   const [selected, setSelected] = useState<Coord | null>(null)
   const [direction, setDirection] = useState<Direction>('across')
+  const inputRef = useRef<HTMLInputElement>(null)
 
   const slots = useMemo(() => deriveSlots(puzzle), [puzzle])
 
@@ -116,7 +136,7 @@ export function useGridEntry({
             : (owned.find((s) => s.direction === direction) ?? owned[0])
         setDirection(target.direction)
         setSelected(target.cells[0])
-        gridRef.current?.focus()
+        inputRef.current?.focus()
         return
       }
     }
@@ -128,7 +148,37 @@ export function useGridEntry({
     } else {
       setSelected(coord)
     }
-    gridRef.current?.focus()
+    inputRef.current?.focus()
+  }
+
+  // ---- Shared entry logic (used by both the key and input handlers) ----
+
+  /** Write `ch` if the selected cell is a letter cell, then advance the slot. */
+  function typeLetter(ch: string): boolean {
+    if (!selected) return false
+    const cell = getCell(puzzle, selected)
+    const upper = ch.toUpperCase()
+    if (cell && isLetterCell(cell) && isValidLetter(upper)) {
+      setLetter(selected, upper)
+      const next = activeSlot && stepInSlot(activeSlot, selected, 1)
+      if (next) selectByKeyboard(next)
+      return true
+    }
+    return false
+  }
+
+  /** Clear the current letter, or step back along the slot and clear that. */
+  function backspace() {
+    if (!selected) return
+    if (getLetter(selected) !== '') {
+      setLetter(selected, '')
+    } else if (activeSlot) {
+      const prev = stepInSlot(activeSlot, selected, -1)
+      if (prev) {
+        selectByKeyboard(prev)
+        setLetter(prev, '')
+      }
+    }
   }
 
   function handleKeyDown(event: KeyboardEvent<HTMLDivElement>): boolean {
@@ -148,15 +198,7 @@ export function useGridEntry({
 
     if (key === 'Backspace') {
       event.preventDefault()
-      if (getLetter(selected) !== '') {
-        setLetter(selected, '')
-      } else if (activeSlot) {
-        const prev = stepInSlot(activeSlot, selected, -1)
-        if (prev) {
-          selectByKeyboard(prev)
-          setLetter(prev, '')
-        }
-      }
+      backspace()
       return true
     }
 
@@ -164,17 +206,28 @@ export function useGridEntry({
       return false
     }
 
-    const cell = getCell(puzzle, selected)
-    const upper = key.toUpperCase()
-    if (cell && isLetterCell(cell) && isValidLetter(upper)) {
+    // A physical letter key (desktop, and iOS soft keyboards). preventDefault
+    // stops the proxy input from also receiving it, so there's no double entry.
+    if (typeLetter(key)) {
       event.preventDefault()
-      setLetter(selected, upper)
-      const next = activeSlot && stepInSlot(activeSlot, selected, 1)
-      if (next) selectByKeyboard(next)
       return true
     }
-
     return false
+  }
+
+  function handleInput(event: FormEvent<HTMLDivElement>) {
+    const target = event.target as HTMLInputElement
+    if (target !== inputRef.current) return // only the hidden proxy input
+    const native = event.nativeEvent as InputEvent
+    const value = target.value
+    target.value = '' // keep the proxy empty; selection state is our truth
+    if (!selected) return
+    if (native.inputType === 'deleteContentBackward') {
+      backspace()
+      return
+    }
+    // Take the last typed character (handles autocorrect inserting several).
+    if (value) typeLetter(value[value.length - 1])
   }
 
   return {
@@ -185,5 +238,7 @@ export function useGridEntry({
     slots,
     selectCell,
     handleKeyDown,
+    handleInput,
+    inputRef,
   }
 }

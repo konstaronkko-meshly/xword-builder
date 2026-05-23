@@ -86,6 +86,8 @@ export function BuildMode({ puzzle, setPuzzle }: BuildModeProps) {
     slots,
     selectCell,
     handleKeyDown,
+    handleInput,
+    inputRef,
   } = useGridEntry({
     puzzle,
     gridRef,
@@ -140,9 +142,20 @@ export function BuildMode({ puzzle, setPuzzle }: BuildModeProps) {
 
   function changeClueText(index: number, text: string) {
     if (!clueCell) return
+    // Setting text drops any icon (text and icon are mutually exclusive).
     setClues(
       clueCell.clues.map((c, j) =>
         j === index ? makeClue(text, c.direction, c.arrow) : c,
+      ),
+    )
+  }
+
+  function changeClueIcon(index: number, iconId: string) {
+    if (!clueCell) return
+    // An icon clue carries no text.
+    setClues(
+      clueCell.clues.map((c, j) =>
+        j === index ? makeClue('', c.direction, c.arrow, iconId) : c,
       ),
     )
   }
@@ -156,7 +169,9 @@ export function BuildMode({ puzzle, setPuzzle }: BuildModeProps) {
     }
     setClues(
       clueCell.clues.map((c, j) =>
-        j === index ? makeClue(c.text, direction, straightArrow(direction)) : c,
+        j === index
+          ? makeClue(c.text, direction, straightArrow(direction), c.icon)
+          : c,
       ),
     )
   }
@@ -273,11 +288,21 @@ export function BuildMode({ puzzle, setPuzzle }: BuildModeProps) {
         <div
           ref={gridRef}
           className="build__grid"
-          tabIndex={0}
           role="application"
           aria-label={fi.build.tools.gridLabel}
           onKeyDown={onKeyDown}
+          onInput={handleInput}
         >
+          <input
+            ref={inputRef}
+            className="grid-input"
+            aria-label={fi.build.tools.gridLabel}
+            inputMode="text"
+            autoCapitalize="characters"
+            autoComplete="off"
+            autoCorrect="off"
+            spellCheck={false}
+          />
           <CrosswordGrid
             puzzle={puzzle}
             selected={selected}
@@ -296,6 +321,7 @@ export function BuildMode({ puzzle, setPuzzle }: BuildModeProps) {
               onRemove={removeClue}
               onTextChange={changeClueText}
               onDirectionChange={changeClueDirection}
+              onIconChange={changeClueIcon}
             />
           </aside>
         )}

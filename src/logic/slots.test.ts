@@ -168,6 +168,15 @@ describe('solution-word (clueless) slots', () => {
     ])
     expect(solutionWordCells(deriveSlots(puzzle))).toEqual([])
   })
+
+  it('treats a picture (icon) clue as a real clue, not a solution slot', () => {
+    const puzzle = puzzleOf([
+      [makeClueCell([makeClue('', 'across', 'right', 'cat')]), L('A'), L('B')],
+    ])
+    const [slot] = deriveSlots(puzzle)
+    expect(isSolutionSlot(slot)).toBe(false)
+    expect(solutionWordCells([slot])).toEqual([])
+  })
 })
 
 describe('slotsForCell — intersections', () => {
