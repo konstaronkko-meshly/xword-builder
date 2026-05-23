@@ -18,7 +18,10 @@ const ARROW_GLYPH: Record<Arrow, string> = {
 
 interface CrosswordGridProps {
   puzzle: Puzzle
-  /** Pixel size of each square cell (default 48). */
+  /**
+   * Pixel size of each square cell. When omitted, the CSS default (--xgrid-cell)
+   * applies, which is responsive (smaller on phones).
+   */
   cellSize?: number
   /** Currently selected cell, if any (build mode). */
   selected?: Coord | null
@@ -49,7 +52,7 @@ const coordKey = (c: Coord) => `${c.row}-${c.col}`
  */
 export function CrosswordGrid({
   puzzle,
-  cellSize = 48,
+  cellSize,
   selected = null,
   onSelectCell,
   highlighted = [],
@@ -70,7 +73,8 @@ export function CrosswordGrid({
       style={
         {
           gridTemplateColumns: `repeat(${puzzle.cols}, var(--xgrid-cell))`,
-          '--xgrid-cell': `${cellSize}px`,
+          // Only override the responsive CSS default when a size is given.
+          ...(cellSize ? { '--xgrid-cell': `${cellSize}px` } : {}),
         } as React.CSSProperties
       }
     >

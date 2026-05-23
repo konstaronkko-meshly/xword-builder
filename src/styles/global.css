@@ -185,8 +185,9 @@ body {
 }
 
 .solve__grid {
-  display: flex;
-  justify-content: center;
+  /* Block + overflow so a grid wider than the viewport scrolls horizontally;
+     .xgrid's margin-inline:auto keeps it centered when it fits. */
+  overflow-x: auto;
   padding: var(--sp-6);
   background: var(--pure-white);
   border: 1px solid rgba(28, 40, 29, 0.08);
@@ -339,6 +340,14 @@ body {
   cursor: not-allowed;
 }
 
+/* Visible keyboard focus for all interactive controls (a11y). */
+.btn:focus-visible,
+.mode-toggle__btn:focus-visible,
+.stepper__btn:focus-visible {
+  outline: 2px solid var(--terminal-green);
+  outline-offset: 2px;
+}
+
 .build__status {
   margin-left: auto;
   font-family: var(--font-mono);
@@ -361,9 +370,9 @@ body {
 }
 
 .build__grid {
-  flex: 0 1 auto;
-  display: flex;
-  justify-content: center;
+  flex: 1 1 320px;
+  min-width: 0; /* allow the flex item to shrink so overflow-x can scroll */
+  overflow-x: auto;
   padding: var(--sp-6);
   background: var(--pure-white);
   border: 1px solid rgba(28, 40, 29, 0.08);
@@ -400,5 +409,22 @@ body {
     flex-direction: column;
     align-items: flex-start;
     gap: var(--sp-3);
+  }
+
+  .app__nav {
+    flex-wrap: wrap;
+  }
+
+  .app__main {
+    padding: var(--sp-5) var(--sp-4);
+  }
+
+  .build__grid,
+  .solve__grid,
+  .build__panel,
+  .library__current,
+  .library__import,
+  .library__saved {
+    padding: var(--sp-4);
   }
 }

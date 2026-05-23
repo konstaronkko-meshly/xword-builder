@@ -49,6 +49,12 @@
   cursor: not-allowed;
 }
 
+.dir-btn:focus-visible,
+.clue-row__remove:focus-visible {
+  outline: 2px solid var(--terminal-green);
+  outline-offset: 2px;
+}
+
 .clue-row__text {
   flex: 1;
   min-width: 0;

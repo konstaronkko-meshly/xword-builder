@@ -1,13 +1,22 @@
 /* Equal-size arrow-word grid. Tokens come from src/styles/tokens.css. */
 
 .xgrid {
+  --xgrid-cell: 48px; /* default; CrosswordGrid's cellSize prop overrides inline */
   display: grid;
   gap: 1px;
   padding: 1px;
   width: max-content;
+  margin-inline: auto; /* centers when it fits; left-aligns + scrolls when wider */
   background: rgba(28, 40, 29, 0.25); /* hairline gridlines show through gaps */
   border-radius: var(--r-sm);
   border: 1px solid rgba(28, 40, 29, 0.25);
+}
+
+/* Shrink cells on phones so wide grids stay usable. */
+@media (max-width: 600px) {
+  .xgrid {
+    --xgrid-cell: 34px;
+  }
 }
 
 .xcell {
