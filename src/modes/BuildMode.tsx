@@ -1,29 +1,20 @@
 import {
   useMemo,
   useRef,
-  useState,
   type Dispatch,
   type KeyboardEvent,
   type SetStateAction,
 } from 'react'
 import { ClueEditor } from '../components/ClueEditor'
 import { CrosswordGrid } from '../components/CrosswordGrid'
-import { scrollCellIntoView } from '../components/gridScroll'
+import { useGridEntry } from '../components/useGridEntry'
 import { fi } from '../i18n/fi'
-import {
-  deriveSlots,
-  sameCoord,
-  slotsForCell,
-  stepInSlot,
-  validatePuzzle,
-} from '../logic'
+import { validatePuzzle } from '../logic'
 import {
   createEmptyPuzzle,
   getCell,
   isClueCell,
-  isInBounds,
   isLetterCell,
-  isValidLetter,
   makeClue,
   makeClueCell,
   makeLetterCell,
@@ -34,7 +25,6 @@ import {
   MAX_DIMENSION,
   type Clue,
   type CellType,
-  type Coord,
   type Direction,
   type Puzzle,
 } from '../model'
@@ -81,43 +71,46 @@ function Stepper({ label, value, min, max, onChange }: StepperProps) {
   )
 }
 
-const ARROW_DELTAS: Record<string, Coord> = {
-  ArrowUp: { row: -1, col: 0 },
-  ArrowDown: { row: 1, col: 0 },
-  ArrowLeft: { row: 0, col: -1 },
-  ArrowRight: { row: 0, col: 1 },
-}
-
 interface BuildModeProps {
   puzzle: Puzzle
   setPuzzle: Dispatch<SetStateAction<Puzzle>>
 }
 
 export function BuildMode({ puzzle, setPuzzle }: BuildModeProps) {
-  const [selected, setSelected] = useState<Coord | null>(null)
-  const [direction, setDirection] = useState<Direction>('across')
   const gridRef = useRef<HTMLDivElement>(null)
 
-  const slots = useMemo(() => deriveSlots(puzzle), [puzzle])
-  const issues = useMemo(() => validatePuzzle(puzzle, slots), [puzzle, slots])
+  const {
+    selected,
+    setSelected,
+    activeSlot,
+    slots,
+    selectCell,
+    handleKeyDown,
+  } = useGridEntry({
+    puzzle,
+    gridRef,
+    getLetter: (coord) => {
+      const cell = getCell(puzzle, coord)
+      return cell && isLetterCell(cell) ? cell.solution : ''
+    },
+    setLetter: (coord, letter) =>
+      setPuzzle((p) => withCell(p, coord, makeLetterCell(letter))),
+  })
 
-  // The active slot: prefer one passing through the selected cell in the
-  // current direction, else any through it, else one the cell *owns* (clue cell).
-  const activeSlot = useMemo(() => {
-    if (!selected) return undefined
-    const candidates = [
-      ...slotsForCell(slots, selected),
-      ...slots.filter((s) => sameCoord(s.clueCoord, selected)),
-    ]
-    return candidates.find((s) => s.direction === direction) ?? candidates[0]
-  }, [selected, direction, slots])
+  const issues = useMemo(() => validatePuzzle(puzzle, slots), [puzzle, slots])
 
   function applyType(type: CellType) {
     if (selected) setPuzzle((p) => setCellType(p, selected, type))
   }
 
-  function setLetterAt(coord: Coord, letter: string) {
-    setPuzzle((p) => withCell(p, coord, makeLetterCell(letter)))
+  // After shared nav/typing, build mode also maps 1–3 to cell types.
+  function onKeyDown(event: KeyboardEvent<HTMLDivElement>) {
+    if (handleKeyDown(event) || !selected) return
+    const typeIndex = ['1', '2', '3'].indexOf(event.key)
+    if (typeIndex >= 0) {
+      event.preventDefault()
+      applyType(CELL_TYPES[typeIndex])
+    }
   }
 
   const selectedCell = selected ? getCell(puzzle, selected) : undefined
@@ -168,23 +161,6 @@ export function BuildMode({ puzzle, setPuzzle }: BuildModeProps) {
     )
   }
 
-  function selectCell(coord: Coord) {
-    // Re-selecting the same cell toggles the active across/down direction.
-    if (selected && sameCoord(selected, coord)) {
-      setDirection((d) => (d === 'across' ? 'down' : 'across'))
-    } else {
-      setSelected(coord)
-    }
-    gridRef.current?.focus()
-  }
-
-  // Move the selection from the keyboard, keeping the target cell in view.
-  // (Click selection does not scroll — the clicked cell was already visible.)
-  function selectByKeyboard(coord: Coord) {
-    setSelected(coord)
-    scrollCellIntoView(gridRef.current, coord)
-  }
-
   function resize(rows: number, cols: number) {
     if (
       resizeDropsContent(puzzle, rows, cols) &&
@@ -217,56 +193,6 @@ export function BuildMode({ puzzle, setPuzzle }: BuildModeProps) {
 
   function changeAuthor(author: string) {
     setPuzzle((p) => ({ ...p, author: author || undefined }))
-  }
-
-  function handleKeyDown(event: KeyboardEvent<HTMLDivElement>) {
-    if (!selected) return
-    const { key } = event
-
-    const delta = ARROW_DELTAS[key]
-    if (delta) {
-      event.preventDefault()
-      const next = {
-        row: selected.row + delta.row,
-        col: selected.col + delta.col,
-      }
-      if (isInBounds(puzzle, next)) selectByKeyboard(next)
-      return
-    }
-
-    if (key === 'Backspace') {
-      event.preventDefault()
-      const cell = getCell(puzzle, selected)
-      if (cell && isLetterCell(cell) && cell.solution !== '') {
-        setLetterAt(selected, '')
-      } else if (activeSlot) {
-        const prev = stepInSlot(activeSlot, selected, -1)
-        if (prev) {
-          selectByKeyboard(prev)
-          setLetterAt(prev, '')
-        }
-      }
-      return
-    }
-
-    if (event.ctrlKey || event.metaKey || event.altKey || key.length !== 1)
-      return
-
-    const cell = getCell(puzzle, selected)
-    const upper = key.toUpperCase()
-    if (cell && isLetterCell(cell) && isValidLetter(upper)) {
-      event.preventDefault()
-      setLetterAt(selected, upper)
-      const next = activeSlot && stepInSlot(activeSlot, selected, 1)
-      if (next) selectByKeyboard(next)
-      return
-    }
-
-    const typeIndex = ['1', '2', '3'].indexOf(key)
-    if (typeIndex >= 0) {
-      event.preventDefault()
-      applyType(CELL_TYPES[typeIndex])
-    }
   }
 
   return (
@@ -350,7 +276,7 @@ export function BuildMode({ puzzle, setPuzzle }: BuildModeProps) {
           tabIndex={0}
           role="application"
           aria-label={fi.build.tools.gridLabel}
-          onKeyDown={handleKeyDown}
+          onKeyDown={onKeyDown}
         >
           <CrosswordGrid
             puzzle={puzzle}
