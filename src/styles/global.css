@@ -62,11 +62,25 @@ body {
   color: var(--mid-green);
 }
 
+/* ---- Top-bar navigation ---- */
+.app__nav {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+}
+
 /* ---- Segmented mode toggle ---- */
 .mode-toggle {
   display: inline-flex;
   gap: var(--sp-1);
   padding: var(--sp-1);
+  background: rgba(108, 255, 82, 0.08);
+  border-radius: 999px;
+}
+
+/* Standalone toggle button (Library) sitting next to the mode toggle. */
+.mode-toggle__btn--solo {
+  padding: var(--sp-2) var(--sp-4);
   background: rgba(108, 255, 82, 0.08);
   border-radius: 999px;
 }

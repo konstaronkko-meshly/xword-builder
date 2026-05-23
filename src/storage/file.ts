@@ -1,4 +1,5 @@
 import type { Puzzle } from '../model'
+import { PuzzleParseError } from './schema'
 import { deserializePuzzle, serializePuzzle } from './serialize'
 
 /** Turn a puzzle title into a safe-ish file name stem. */
@@ -31,8 +32,21 @@ export function downloadPuzzle(puzzle: Puzzle, filename?: string): void {
 
 /**
  * Read a user-picked `.json` file into a validated {@link Puzzle}.
- * @throws {PuzzleParseError} if the file is not a valid puzzle.
+ * Uses FileReader (works in browsers and jsdom). Rejects with a
+ * {@link PuzzleParseError} if the file can't be read or isn't a valid puzzle.
  */
-export async function readPuzzleFile(file: File): Promise<Puzzle> {
-  return deserializePuzzle(await file.text())
+export function readPuzzleFile(file: File): Promise<Puzzle> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader()
+    reader.onerror = () =>
+      reject(new PuzzleParseError('Could not read the file.'))
+    reader.onload = () => {
+      try {
+        resolve(deserializePuzzle(String(reader.result)))
+      } catch (error) {
+        reject(error)
+      }
+    }
+    reader.readAsText(file)
+  })
 }

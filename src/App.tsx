@@ -1,15 +1,108 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { fi } from './i18n/fi'
 import { ModeToggle, type Mode } from './components/ModeToggle'
+import { PuzzleLibrary } from './components/PuzzleLibrary'
 import { BuildMode } from './modes/BuildMode'
 import { SolveMode } from './modes/SolveMode'
 import { createSamplePuzzle } from './fixtures/samplePuzzle'
+import { createEmptyPuzzle } from './model'
+import {
+  PuzzleParseError,
+  PuzzleStore,
+  downloadPuzzle,
+  readPuzzleFile,
+  type PuzzleSummary,
+} from './storage'
+
+const NEW_PUZZLE_SIZE = 11
 
 export default function App() {
+  const store = useMemo(() => new PuzzleStore(), [])
+
   const [mode, setMode] = useState<Mode>('build')
-  // The working puzzle lives here (lifted from BuildMode) so it survives the
-  // build/solve toggle and can be handed to both modes.
+  const [libraryOpen, setLibraryOpen] = useState(false)
+  // The working puzzle (lifted here) and the storage id it was loaded/saved as.
   const [puzzle, setPuzzle] = useState(createSamplePuzzle)
+  const [currentId, setCurrentId] = useState<string | null>(null)
+  const [saved, setSaved] = useState<PuzzleSummary[]>(() => store.list())
+  const [importError, setImportError] = useState<string | null>(null)
+
+  const refresh = () => setSaved(store.list())
+
+  function selectMode(next: Mode) {
+    setMode(next)
+    setLibraryOpen(false)
+  }
+
+  // ---- Library actions ----
+  function saveCurrent() {
+    const id = store.save(puzzle, currentId ?? undefined)
+    setCurrentId(id)
+    refresh()
+  }
+
+  function exportCurrent() {
+    downloadPuzzle(puzzle)
+  }
+
+  function newPuzzle() {
+    setPuzzle(createEmptyPuzzle(NEW_PUZZLE_SIZE, NEW_PUZZLE_SIZE))
+    setCurrentId(null)
+    setMode('build')
+    setLibraryOpen(false)
+  }
+
+  async function importFile(file: File) {
+    try {
+      const imported = await readPuzzleFile(file)
+      setPuzzle(imported)
+      setCurrentId(null)
+      setImportError(null)
+      setMode('build')
+      setLibraryOpen(false)
+    } catch (error) {
+      setImportError(
+        error instanceof PuzzleParseError ? error.message : String(error),
+      )
+    }
+  }
+
+  function openSaved(id: string) {
+    const loaded = store.load(id)
+    if (!loaded) return
+    setPuzzle(loaded)
+    setCurrentId(id)
+    setMode('build')
+    setLibraryOpen(false)
+  }
+
+  function duplicateSaved(id: string) {
+    const loaded = store.load(id)
+    if (!loaded) return
+    store.save({ ...loaded, title: loaded.title + fi.library.copySuffix })
+    refresh()
+  }
+
+  function renameSaved(id: string) {
+    const loaded = store.load(id)
+    if (!loaded) return
+    const title = window.prompt(fi.library.renamePrompt, loaded.title)
+    if (title === null) return
+    store.save({ ...loaded, title }, id)
+    refresh()
+  }
+
+  function deleteSaved(id: string) {
+    if (!window.confirm(fi.library.confirmDelete)) return
+    store.remove(id)
+    if (id === currentId) setCurrentId(null)
+    refresh()
+  }
+
+  function exportSaved(id: string) {
+    const loaded = store.load(id)
+    if (loaded) downloadPuzzle(loaded)
+  }
 
   return (
     <div className="app">
@@ -18,11 +111,36 @@ export default function App() {
           <h1 className="app__title">{fi.appTitle}</h1>
           <span className="app__tagline">{fi.appTagline}</span>
         </div>
-        <ModeToggle mode={mode} onChange={setMode} />
+        <div className="app__nav">
+          <ModeToggle mode={mode} onChange={selectMode} />
+          <button
+            type="button"
+            className={`mode-toggle__btn mode-toggle__btn--solo${libraryOpen ? ' is-active' : ''}`}
+            aria-pressed={libraryOpen}
+            onClick={() => setLibraryOpen(true)}
+          >
+            {fi.mode.library}
+          </button>
+        </div>
       </header>
 
       <main className="app__main">
-        {mode === 'build' ? (
+        {libraryOpen ? (
+          <PuzzleLibrary
+            saved={saved}
+            currentTitle={puzzle.title}
+            importError={importError}
+            onSaveCurrent={saveCurrent}
+            onExportCurrent={exportCurrent}
+            onNew={newPuzzle}
+            onImport={importFile}
+            onOpen={openSaved}
+            onDuplicate={duplicateSaved}
+            onRename={renameSaved}
+            onDelete={deleteSaved}
+            onExport={exportSaved}
+          />
+        ) : mode === 'build' ? (
           <BuildMode puzzle={puzzle} setPuzzle={setPuzzle} />
         ) : (
           <SolveMode puzzle={puzzle} />
