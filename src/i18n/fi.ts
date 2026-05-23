@@ -55,6 +55,11 @@ export const fi = {
       add: 'Lisää vihje',
       remove: 'Poista vihje',
       empty: 'Ei vihjeitä. Lisää enintään kaksi.',
+      modeText: 'Teksti',
+      modeIcon: 'Kuva',
+      iconSearch: 'Hae kuvaa…',
+      iconChange: 'Vaihda kuva',
+      noIconResults: 'Ei kuvia haulla.',
     },
     meta: {
       title: 'Otsikko',

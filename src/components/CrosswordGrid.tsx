@@ -6,6 +6,7 @@ import {
   type Coord,
   type Puzzle,
 } from '../model'
+import { ICONS, type IconId } from '../icons'
 import './CrosswordGrid.css'
 
 /** Glyph drawn for each arrow kind (bent arrows included for completeness). */
@@ -116,12 +117,23 @@ export function CrosswordGrid({
 
 function cellContent(cell: Cell, letter: string) {
   if (isClueCell(cell)) {
-    return cell.clues.map((clue, i) => (
-      <span className="xcell__clue" key={i}>
-        <span className="xcell__arrow">{ARROW_GLYPH[clue.arrow]}</span>
-        <span className="xcell__text">{clue.text}</span>
-      </span>
-    ))
+    return cell.clues.map((clue, i) => {
+      const icon = clue.icon ? ICONS[clue.icon as IconId] : undefined
+      return (
+        <span className="xcell__clue" key={i}>
+          <span className="xcell__arrow">{ARROW_GLYPH[clue.arrow]}</span>
+          {clue.icon ? (
+            <img
+              className="xcell__icon"
+              src={icon?.src}
+              alt={icon?.label ?? clue.icon}
+            />
+          ) : (
+            <span className="xcell__text">{clue.text}</span>
+          )}
+        </span>
+      )
+    })
   }
   if (isLetterCell(cell)) return letter
   return null

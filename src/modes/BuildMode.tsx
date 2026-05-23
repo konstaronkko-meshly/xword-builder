@@ -140,9 +140,20 @@ export function BuildMode({ puzzle, setPuzzle }: BuildModeProps) {
 
   function changeClueText(index: number, text: string) {
     if (!clueCell) return
+    // Setting text drops any icon (text and icon are mutually exclusive).
     setClues(
       clueCell.clues.map((c, j) =>
         j === index ? makeClue(text, c.direction, c.arrow) : c,
+      ),
+    )
+  }
+
+  function changeClueIcon(index: number, iconId: string) {
+    if (!clueCell) return
+    // An icon clue carries no text.
+    setClues(
+      clueCell.clues.map((c, j) =>
+        j === index ? makeClue('', c.direction, c.arrow, iconId) : c,
       ),
     )
   }
@@ -156,7 +167,9 @@ export function BuildMode({ puzzle, setPuzzle }: BuildModeProps) {
     }
     setClues(
       clueCell.clues.map((c, j) =>
-        j === index ? makeClue(c.text, direction, straightArrow(direction)) : c,
+        j === index
+          ? makeClue(c.text, direction, straightArrow(direction), c.icon)
+          : c,
       ),
     )
   }
@@ -296,6 +309,7 @@ export function BuildMode({ puzzle, setPuzzle }: BuildModeProps) {
               onRemove={removeClue}
               onTextChange={changeClueText}
               onDirectionChange={changeClueDirection}
+              onIconChange={changeClueIcon}
             />
           </aside>
         )}

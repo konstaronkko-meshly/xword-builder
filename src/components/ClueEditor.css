@@ -17,14 +17,53 @@
 
 .clue-row {
   display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  margin-bottom: var(--sp-4);
+  padding-bottom: var(--sp-3);
+  border-bottom: 1px solid rgba(28, 40, 29, 0.08);
+}
+
+.clue-row__top {
+  display: flex;
   align-items: center;
   gap: var(--sp-2);
-  margin-bottom: var(--sp-3);
 }
 
 .clue-row__dirs {
   display: inline-flex;
   gap: 2px;
+}
+
+/* Teksti / Kuva mode toggle. */
+.clue-row__mode {
+  display: inline-flex;
+  gap: 2px;
+}
+
+.mode-btn {
+  height: 28px;
+  padding: 0 var(--sp-2);
+  border-radius: var(--r-sm);
+  border: 1px solid rgba(28, 40, 29, 0.2);
+  background: var(--pale-green);
+  color: var(--dark-green);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 120ms ease;
+}
+
+.mode-btn.is-active {
+  background: var(--terminal-green);
+  border-color: var(--terminal-green);
+}
+
+.mode-btn:focus-visible {
+  outline: 2px solid var(--terminal-green);
+  outline-offset: 2px;
 }
 
 .dir-btn {
@@ -73,6 +112,7 @@
 }
 
 .clue-row__remove {
+  margin-left: auto;
   border: 0;
   background: none;
   color: var(--mid-green);
@@ -84,4 +124,101 @@
 
 .clue-row__remove:hover {
   color: var(--grey-orange);
+}
+
+/* Selected picture clue: thumbnail + label + change button. */
+.clue-row__icon {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+}
+
+.clue-row__icon img {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+}
+
+.clue-row__icon-label {
+  flex: 1;
+  min-width: 0;
+  font-size: 13px;
+  color: var(--dark-green);
+}
+
+/* Searchable icon picker. */
+.icon-picker {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+
+.icon-picker__search {
+  padding: var(--sp-2);
+  border: 1px solid rgba(28, 40, 29, 0.2);
+  border-radius: var(--r-sm);
+  font-family: var(--font-sans);
+  font-size: 13px;
+  color: var(--dark-green);
+  background: var(--pure-white);
+}
+
+.icon-picker__search:focus-visible {
+  outline: 2px solid var(--terminal-green);
+  outline-offset: 1px;
+}
+
+.icon-picker__grid {
+  list-style: none;
+  margin: 0;
+  padding: var(--sp-1);
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(40px, 1fr));
+  gap: var(--sp-1);
+  max-height: 220px;
+  overflow-y: auto;
+  border: 1px solid rgba(28, 40, 29, 0.12);
+  border-radius: var(--r-sm);
+  background: var(--pure-white);
+}
+
+.icon-picker__item {
+  width: 100%;
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  border: 1px solid transparent;
+  border-radius: var(--r-sm);
+  background: none;
+  cursor: pointer;
+}
+
+.icon-picker__item:hover {
+  background: var(--pale-green);
+}
+
+.icon-picker__item:focus-visible {
+  outline: 2px solid var(--terminal-green);
+  outline-offset: 1px;
+}
+
+.icon-picker__item img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.icon-picker__empty {
+  margin: 0;
+  font-size: 13px;
+  color: var(--mid-green);
+}
+
+.icon-picker__credit {
+  margin: 0;
+  font-size: 10px;
+  line-height: 1.3;
+  color: var(--mid-green);
 }

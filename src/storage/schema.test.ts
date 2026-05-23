@@ -129,7 +129,35 @@ describe('deserialize rejects malformed input', () => {
             {
               type: 'clue',
               clues: [
-                { text: 'q', direction: 'across', arrow: 'right', icon: 'cat' },
+                {
+                  text: 'q',
+                  direction: 'across',
+                  arrow: 'right',
+                  icon: 'kissa',
+                },
+              ],
+            },
+          ],
+        ],
+      },
+    }),
+    'unknown clue icon id': JSON.stringify({
+      schemaVersion: 2,
+      puzzle: {
+        title: 'x',
+        rows: 1,
+        cols: 1,
+        cells: [
+          [
+            {
+              type: 'clue',
+              clues: [
+                {
+                  text: '',
+                  direction: 'across',
+                  arrow: 'right',
+                  icon: 'not-a-real-icon',
+                },
               ],
             },
           ],
@@ -152,7 +180,7 @@ describe('schema v2 — picture-clue icons', () => {
       ...base,
       cells: [
         [
-          makeClueCell([makeClue('', 'across', 'right', 'cat')]),
+          makeClueCell([makeClue('', 'across', 'right', 'kissa')]),
           makeLetterCell('A'),
           makeLetterCell('B'),
         ],
@@ -161,7 +189,7 @@ describe('schema v2 — picture-clue icons', () => {
     const restored = deserializePuzzle(serializePuzzle(puzzle))
     expect(restored).toEqual(puzzle)
     const cell = restored.cells[0][0]
-    expect(cell.type === 'clue' && cell.clues[0].icon).toBe('cat')
+    expect(cell.type === 'clue' && cell.clues[0].icon).toBe('kissa')
   })
 
   it('still loads a v1 document (no icon field)', () => {

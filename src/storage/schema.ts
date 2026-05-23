@@ -11,6 +11,7 @@ import {
   type Direction,
   type Puzzle,
 } from '../model'
+import { ICON_IDS } from '../icons/iconData'
 
 /** Current on-disk schema version. Bump + migrate when the format changes. */
 export const SCHEMA_VERSION = 2
@@ -63,8 +64,13 @@ function parseClue(raw: unknown, where: string): Clue {
   if (icon !== undefined && typeof icon !== 'string') {
     fail(`${where}: clue icon must be a string when present.`)
   }
-  // Membership of `icon` against the icon registry is validated in a later
-  // task; here we guarantee shape + the text/icon-exclusivity invariant.
+  if (
+    typeof icon === 'string' &&
+    icon !== '' &&
+    !(ICON_IDS as readonly string[]).includes(icon)
+  ) {
+    fail(`${where}: unknown clue icon ${JSON.stringify(icon)}.`)
+  }
   return rebuild(
     () =>
       makeClue(

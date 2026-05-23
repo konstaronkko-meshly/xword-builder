@@ -7,4 +7,12 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
   base: './',
+  build: {
+    // Keep the picture-clue icons as separate files instead of inlining the
+    // small ones as base64 in the JS bundle — they're only fetched when the
+    // grid/picker actually shows them, so inlining ~100 SVGs would bloat the
+    // initial download for no benefit.
+    assetsInlineLimit: (filePath) =>
+      filePath.endsWith('.svg') ? false : undefined,
+  },
 })

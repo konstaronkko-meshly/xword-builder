@@ -119,3 +119,11 @@
   word-break: break-word;
   hyphens: auto;
 }
+
+/* Picture clue: the icon sits beside the arrow, sized to the clue line. */
+.xcell__icon {
+  min-width: 0;
+  height: calc(var(--xgrid-cell) * 0.52);
+  max-width: 100%;
+  object-fit: contain;
+}

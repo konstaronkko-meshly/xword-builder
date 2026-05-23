@@ -1,7 +1,12 @@
 // @vitest-environment jsdom
 import { cleanup, fireEvent, render } from '@testing-library/react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { createEmptyPuzzle } from '../model'
+import {
+  createEmptyPuzzle,
+  makeClue,
+  makeClueCell,
+  makeLetterCell,
+} from '../model'
 import { createSamplePuzzle } from '../fixtures/samplePuzzle'
 import { CrosswordGrid } from './CrosswordGrid'
 
@@ -57,6 +62,23 @@ describe('CrosswordGrid', () => {
     const cells = container.querySelectorAll('[role="gridcell"]')
     fireEvent.click(cells[3]) // row 1, col 1
     expect(onSelect).toHaveBeenCalledWith({ row: 1, col: 1 })
+  })
+
+  it('renders a picture-clue icon as an image', () => {
+    const base = createEmptyPuzzle(1, 2)
+    const puzzle = {
+      ...base,
+      cells: [
+        [
+          makeClueCell([makeClue('', 'across', 'right', 'kissa')]),
+          makeLetterCell('A'),
+        ],
+      ],
+    }
+    const { container } = render(<CrosswordGrid puzzle={puzzle} />)
+    const img = container.querySelector('.xcell__icon') as HTMLImageElement
+    expect(img).toBeTruthy()
+    expect(img.getAttribute('alt')).toBe('Kissa')
   })
 
   it('marks solution-word cells with is-solution', () => {
