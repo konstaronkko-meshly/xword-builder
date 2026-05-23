@@ -9,6 +9,7 @@ import { serializePuzzle } from './storage'
 Element.prototype.scrollIntoView = vi.fn()
 URL.createObjectURL = vi.fn(() => 'blob:x')
 URL.revokeObjectURL = vi.fn()
+window.print = vi.fn()
 
 afterEach(() => {
   cleanup()
@@ -110,5 +111,37 @@ describe('App — puzzle library', () => {
       target: { files: [new File(['{not json'], 'bad.json')] },
     })
     expect(await findByText(/Tiedostoa ei voitu lukea/)).toBeTruthy()
+  })
+})
+
+describe('App — print', () => {
+  it('opens the print overlay, toggles the answer key, and prints', () => {
+    const { container, getByText, getByLabelText } = render(<App />)
+    expect(container.querySelector('.print-overlay')).toBeNull()
+
+    // The header "Tulosta" button is the only such text before the overlay opens.
+    fireEvent.click(getByText('Tulosta'))
+    const sheet = container.querySelector('.print-sheet') as HTMLElement
+    expect(sheet).toBeTruthy()
+
+    const filledLetters = () =>
+      [...sheet.querySelectorAll('.xcell--letter')].filter((el) =>
+        el.textContent?.trim(),
+      ).length
+
+    expect(filledLetters()).toBe(0) // blank puzzle by default
+    fireEvent.click(getByLabelText('Näytä vastaukset'))
+    expect(filledLetters()).toBeGreaterThan(0) // answer key reveals solutions
+
+    fireEvent.click(getByText('Tulosta', { selector: 'button.btn' }))
+    expect(window.print).toHaveBeenCalled()
+  })
+
+  it('closes the print overlay with the close button', () => {
+    const { container, getByText } = render(<App />)
+    fireEvent.click(getByText('Tulosta'))
+    expect(container.querySelector('.print-overlay')).toBeTruthy()
+    fireEvent.click(getByText('Sulje'))
+    expect(container.querySelector('.print-overlay')).toBeNull()
   })
 })

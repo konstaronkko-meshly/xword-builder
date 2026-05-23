@@ -87,6 +87,14 @@ export const fi = {
       label: 'Aika',
     },
   },
+  print: {
+    button: 'Tulosta',
+    title: 'Tulosta ristikko',
+    showAnswers: 'Näytä vastaukset',
+    answerKey: 'Vastausavain',
+    print: 'Tulosta',
+    close: 'Sulje',
+  },
 } as const
 
 export type Strings = typeof fi

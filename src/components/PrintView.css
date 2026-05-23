@@ -1,0 +1,149 @@
+/* Print overlay + sheet. On screen it's a modal; in print it becomes the page.
+   Tokens come from src/styles/tokens.css. */
+
+.print-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-5);
+  padding: var(--sp-6);
+  background: rgba(28, 40, 29, 0.55);
+  overflow: auto;
+}
+
+.print-overlay__controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-4);
+  width: 100%;
+  max-width: var(--content-max);
+  padding: var(--sp-4) var(--sp-5);
+  background: var(--dark-green);
+  color: var(--pale-green);
+  border-radius: var(--r-lg);
+}
+
+.print-overlay__title {
+  margin: 0 auto 0 0;
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.print-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.print-toggle input {
+  accent-color: var(--terminal-green);
+  cursor: pointer;
+}
+
+.print-sheet {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-5);
+  width: 100%;
+  max-width: var(--content-max);
+  padding: var(--sp-7);
+  background: var(--pure-white);
+  border-radius: var(--r-lg);
+}
+
+.print-sheet__title {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  text-align: center;
+  color: var(--dark-green);
+}
+
+.print-sheet__caption {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--mid-green);
+}
+
+/* ---- Print: hide the app + overlay chrome, keep only the sheet ---- */
+@media print {
+  .app {
+    display: none !important;
+  }
+
+  .print-overlay {
+    position: static;
+    inset: auto;
+    display: block;
+    padding: 0;
+    background: none;
+    overflow: visible;
+  }
+
+  .print-overlay__controls {
+    display: none !important;
+  }
+
+  .print-sheet {
+    max-width: none;
+    padding: 0;
+    border-radius: 0;
+    gap: var(--sp-4);
+    /* Force the grid's background-driven gridlines + fills to print. */
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .print-sheet__title,
+  .print-sheet__caption {
+    color: #000;
+  }
+
+  /* Crisp black/white grid on paper, independent of the on-screen tints. */
+  .print-sheet .xgrid {
+    background: #000;
+    border-color: #000;
+  }
+
+  .print-sheet .xcell {
+    background: #fff;
+  }
+
+  .print-sheet .xcell--blocked {
+    background: #000;
+  }
+
+  .print-sheet .xcell--clue {
+    background: #fff;
+    color: #000;
+  }
+
+  .print-sheet .xcell--letter,
+  .print-sheet .xcell__arrow {
+    color: #000;
+  }
+
+  /* Drop any leftover interactive/solve-state styling. */
+  .print-sheet .xcell.is-selected {
+    box-shadow: none;
+  }
+
+  @page {
+    margin: 12mm;
+  }
+}
