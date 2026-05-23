@@ -4,7 +4,7 @@ import { ModeToggle, type Mode } from './components/ModeToggle'
 import { PuzzleLibrary } from './components/PuzzleLibrary'
 import { BuildMode } from './modes/BuildMode'
 import { SolveMode } from './modes/SolveMode'
-import { createSamplePuzzle } from './fixtures/samplePuzzle'
+import { createDefaultPuzzle } from './fixtures/defaultPuzzle'
 import { createEmptyPuzzle } from './model'
 import {
   PuzzleParseError,
@@ -22,7 +22,7 @@ export default function App() {
   const [mode, setMode] = useState<Mode>('build')
   const [libraryOpen, setLibraryOpen] = useState(false)
   // The working puzzle (lifted here) and the storage id it was loaded/saved as.
-  const [puzzle, setPuzzle] = useState(createSamplePuzzle)
+  const [puzzle, setPuzzle] = useState(createDefaultPuzzle)
   const [currentId, setCurrentId] = useState<string | null>(null)
   const [saved, setSaved] = useState<PuzzleSummary[]>(() => store.list())
   const [importError, setImportError] = useState<string | null>(null)

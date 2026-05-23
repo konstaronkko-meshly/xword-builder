@@ -22,8 +22,9 @@ const rowButton = (item: Element, text: string) =>
 describe('App — puzzle survives the build/solve toggle', () => {
   it('keeps an edit made in build mode when switching to solve mode', () => {
     const { container, getByText } = render(<App />)
-    const cells = () => container.querySelectorAll('[role="gridcell"]')
-    fireEvent.click(cells()[0])
+    // Edit the first clue cell (the default puzzle's first cell may be blocked).
+    const clueCell = container.querySelector('[role="gridcell"].xcell--clue')!
+    fireEvent.click(clueCell)
     const input = container.querySelector('.clue-row__text') as HTMLInputElement
     fireEvent.change(input, { target: { value: 'Muutettu' } })
 

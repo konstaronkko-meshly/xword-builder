@@ -1,0 +1,963 @@
+{
+  "schemaVersion": 1,
+  "puzzle": {
+    "title": "Esimerkki",
+    "rows": 13,
+    "cols": 13,
+    "cells": [
+      [
+        {
+          "type": "blocked"
+        },
+        {
+          "type": "clue",
+          "clues": [
+            {
+              "text": "PIENI KUNTA",
+              "direction": "down",
+              "arrow": "down"
+            }
+          ]
+        },
+        {
+          "type": "clue",
+          "clues": [
+            {
+              "text": "EI SAMAAN AIKAAN",
+              "direction": "down",
+              "arrow": "down"
+            }
+          ]
+        },
+        {
+          "type": "clue",
+          "clues": [
+            {
+              "text": "LAMPAI-TA KUVA-TAAN USEIN NÄIN",
+              "direction": "down",
+              "arrow": "down"
+            }
+          ]
+        },
+        {
+          "type": "clue",
+          "clues": [
+            {
+              "text": "KOULU-LAISEN LUKKA-RISSA",
+              "direction": "down",
+              "arrow": "down"
+            }
+          ]
+        },
+        {
+          "type": "blocked"
+        },
+        {
+          "type": "clue",
+          "clues": [
+            {
+              "text": "PETOJEN SUUT",
+              "direction": "down",
+              "arrow": "down"
+            }
+          ]
+        },
+        {
+          "type": "clue",
+          "clues": [
+            {
+              "text": "ESIM. JOHANS-SON",
+              "direction": "down",
+              "arrow": "down"
+            }
+          ]
+        },
+        {
+          "type": "clue",
+          "clues": [
+            {
+              "text": "TÄÄLTÄ VERO-KORTTI",
+              "direction": "down",
+              "arrow": "down"
+            }
+          ]
+        },
+        {
+          "type": "clue",
+          "clues": [
+            {
+              "text": "RAKEN-NUS",
+              "direction": "down",
+              "arrow": "down"
+            }
+          ]
+        },
+        {
+          "type": "clue",
+          "clues": [
+            {
+              "text": "TOTTA (-T)",
+              "direction": "down",
+              "arrow": "down"
+            }
+          ]
+        },
+        {
+          "type": "blocked"
+        },
+        {
+          "type": "clue",
+          "clues": [
+            {
+              "text": "NAAPURI",
+              "direction": "down",
+              "arrow": "down"
+            }
+          ]
+        }
+      ],
+      [
+        {
+          "type": "clue",
+          "clues": [
+            {
+              "text": "LAPSEL-LA JA LEMMI-KILLÄ",
+              "direction": "across",
+              "arrow": "right"
+            }
+          ]
+        },
+        {
+          "type": "letter",
+          "solution": "L"
+        },
+        {
+          "type": "letter",
+          "solution": "E"
+        },
+        {
+          "type": "letter",
+          "solution": "L"
+        },
+        {
+          "type": "letter",
+          "solution": "U"
+        },
+        {
+          "type": "clue",
+          "clues": [
+            {
+              "text": "KAU-PUNKI JAPA-NISSA",
+              "direction": "across",
+              "arrow": "right"
+            }
+          ]
+        },
+        {
+          "type": "letter",
+          "solution": "K"
+        },
+        {
+          "type": "letter",
+          "solution": "I"
+        },
+        {
+          "type": "letter",
+          "solution": "O"
+        },
+        {
+          "type": "letter",
+          "solution": "T"
+        },
+        {
+          "type": "letter",
+          "solution": "O"
+        },
+        {
+          "type": "clue",
+          "clues": [
+            {
+              "text": "RUOKA",
+              "direction": "down",
+              "arrow": "down"
+            }
+          ]
+        },
+        {
+          "type": "letter",
+          "solution": "T"
+        }
+      ],
+      [
+        {
+          "type": "clue",
+          "clues": [
+            {
+              "text": "HANA",
+              "direction": "across",
+              "arrow": "right"
+            }
+          ]
+        },
+        {
+          "type": "letter",
+          "solution": "O"
+        },
+        {
+          "type": "letter",
+          "solution": "R"
+        },
+        {
+          "type": "letter",
+          "solution": "A"
+        },
+        {
+          "type": "letter",
+          "solution": "S"
+        },
+        {
+          "type": "clue",
+          "clues": [
+            {
+              "text": "KAIKKI HUOLIS-SAAN TÄSTÄ",
+              "direction": "across",
+              "arrow": "right"
+            }
+          ]
+        },
+        {
+          "type": "letter",
+          "solution": "I"
+        },
+        {
+          "type": "letter",
+          "solution": "L"
+        },
+        {
+          "type": "letter",
+          "solution": "M"
+        },
+        {
+          "type": "letter",
+          "solution": "A"
+        },
+        {
+          "type": "letter",
+          "solution": "S"
+        },
+        {
+          "type": "letter",
+          "solution": "T"
+        },
+        {
+          "type": "letter",
+          "solution": "O"
+        }
+      ],
+      [
+        {
+          "type": "clue",
+          "clues": [
+            {
+              "text": "HENGELLINEN JOHTA-JA",
+              "direction": "across",
+              "arrow": "right"
+            }
+          ]
+        },
+        {
+          "type": "letter",
+          "solution": "P"
+        },
+        {
+          "type": "letter",
+          "solution": "I"
+        },
+        {
+          "type": "letter",
+          "solution": "U"
+        },
+        {
+          "type": "letter",
+          "solution": "S"
+        },
+        {
+          "type": "clue",
+          "clues": [
+            {
+              "text": "JORIINIT",
+              "direction": "across",
+              "arrow": "right"
+            }
+          ]
+        },
+        {
+          "type": "letter",
+          "solution": "D"
+        },
+        {
+          "type": "letter",
+          "solution": "A"
+        },
+        {
+          "type": "letter",
+          "solution": "A"
+        },
+        {
+          "type": "letter",
+          "solution": "L"
+        },
+        {
+          "type": "letter",
+          "solution": "I"
+        },
+        {
+          "type": "letter",
+          "solution": "A"
+        },
+        {
+          "type": "letter",
+          "solution": "T"
+        }
+      ],
+      [
+        {
+          "type": "clue",
+          "clues": [
+            {
+              "text": "ESIM. HENKI",
+              "direction": "across",
+              "arrow": "right"
+            }
+          ]
+        },
+        {
+          "type": "letter",
+          "solution": "P"
+        },
+        {
+          "type": "letter",
+          "solution": "A"
+        },
+        {
+          "type": "letter",
+          "solution": "H"
+        },
+        {
+          "type": "letter",
+          "solution": "A"
+        },
+        {
+          "type": "clue",
+          "clues": [
+            {
+              "text": "YLPPÖ",
+              "direction": "across",
+              "arrow": "right"
+            }
+          ]
+        },
+        {
+          "type": "letter",
+          "solution": "A"
+        },
+        {
+          "type": "letter",
+          "solution": "R"
+        },
+        {
+          "type": "letter",
+          "solution": "V"
+        },
+        {
+          "type": "letter",
+          "solution": "O"
+        },
+        {
+          "type": "clue",
+          "clues": [
+            {
+              "text": "\"ONE --- PLEASE!\"",
+              "direction": "down",
+              "arrow": "down"
+            }
+          ]
+        },
+        {
+          "type": "letter",
+          "solution": "M"
+        },
+        {
+          "type": "letter",
+          "solution": "O"
+        }
+      ],
+      [
+        {
+          "type": "clue",
+          "clues": [
+            {
+              "text": "SÄIKÄH-DYS!",
+              "direction": "across",
+              "arrow": "right"
+            }
+          ]
+        },
+        {
+          "type": "letter",
+          "solution": "I"
+        },
+        {
+          "type": "letter",
+          "solution": "I"
+        },
+        {
+          "type": "letter",
+          "solution": "K"
+        },
+        {
+          "type": "clue",
+          "clues": [
+            {
+              "text": "WTC:N T",
+              "direction": "down",
+              "arrow": "down"
+            }
+          ]
+        },
+        {
+          "type": "clue",
+          "clues": [
+            {
+              "text": "TÄTÄ PITKIN",
+              "direction": "across",
+              "arrow": "right"
+            }
+          ]
+        },
+        {
+          "type": "letter",
+          "solution": "T"
+        },
+        {
+          "type": "letter",
+          "solution": "I"
+        },
+        {
+          "type": "letter",
+          "solution": "E"
+        },
+        {
+          "type": "clue",
+          "clues": [
+            {
+              "text": "TEOT",
+              "direction": "down",
+              "arrow": "down"
+            }
+          ]
+        },
+        {
+          "type": "letter",
+          "solution": "B"
+        },
+        {
+          "type": "letter",
+          "solution": "A"
+        },
+        {
+          "type": "letter",
+          "solution": "R"
+        }
+      ],
+      [
+        {
+          "type": "blocked"
+        },
+        {
+          "type": "clue",
+          "clues": [
+            {
+              "text": "NIITTY",
+              "direction": "across",
+              "arrow": "right"
+            },
+            {
+              "text": "ETELÄ-HELSIN-KIÄ",
+              "direction": "down",
+              "arrow": "down"
+            }
+          ]
+        },
+        {
+          "type": "letter",
+          "solution": "K"
+        },
+        {
+          "type": "letter",
+          "solution": "E"
+        },
+        {
+          "type": "letter",
+          "solution": "T"
+        },
+        {
+          "type": "letter",
+          "solution": "O"
+        },
+        {
+          "type": "blocked"
+        },
+        {
+          "type": "clue",
+          "clues": [
+            {
+              "text": "URA",
+              "direction": "across",
+              "arrow": "right"
+            }
+          ]
+        },
+        {
+          "type": "letter",
+          "solution": "R"
+        },
+        {
+          "type": "letter",
+          "solution": "A"
+        },
+        {
+          "type": "letter",
+          "solution": "I"
+        },
+        {
+          "type": "letter",
+          "solution": "L"
+        },
+        {
+          "type": "letter",
+          "solution": "O"
+        }
+      ],
+      [
+        {
+          "type": "clue",
+          "clues": [
+            {
+              "text": "VAARIL-LA OLI TÄMÄ",
+              "direction": "across",
+              "arrow": "right"
+            }
+          ]
+        },
+        {
+          "type": "letter",
+          "solution": "S"
+        },
+        {
+          "type": "letter",
+          "solution": "A"
+        },
+        {
+          "type": "letter",
+          "solution": "A"
+        },
+        {
+          "type": "letter",
+          "solution": "R"
+        },
+        {
+          "type": "letter",
+          "solution": "I"
+        },
+        {
+          "type": "clue",
+          "clues": [
+            {
+              "text": "IHMI-NENKIN",
+              "direction": "down",
+              "arrow": "down"
+            }
+          ]
+        },
+        {
+          "type": "clue",
+          "clues": [
+            {
+              "text": "\"KÄYKS?\"",
+              "direction": "across",
+              "arrow": "right"
+            }
+          ]
+        },
+        {
+          "type": "letter",
+          "solution": "O"
+        },
+        {
+          "type": "letter",
+          "solution": "K"
+        },
+        {
+          "type": "letter",
+          "solution": "E"
+        },
+        {
+          "type": "blocked"
+        },
+        {
+          "type": "clue",
+          "clues": [
+            {
+              "text": "PITÄÄ LEKURIN POIS",
+              "direction": "down",
+              "arrow": "down"
+            }
+          ]
+        }
+      ],
+      [
+        {
+          "type": "clue",
+          "clues": [
+            {
+              "text": "EI SAA ITKEÄ KUN SOI",
+              "direction": "across",
+              "arrow": "right"
+            }
+          ]
+        },
+        {
+          "type": "letter",
+          "solution": "K"
+        },
+        {
+          "type": "letter",
+          "solution": "I"
+        },
+        {
+          "type": "letter",
+          "solution": "T"
+        },
+        {
+          "type": "letter",
+          "solution": "A"
+        },
+        {
+          "type": "letter",
+          "solution": "R"
+        },
+        {
+          "type": "letter",
+          "solution": "A"
+        },
+        {
+          "type": "clue",
+          "clues": [
+            {
+              "text": "-KAIHDIN",
+              "direction": "down",
+              "arrow": "down"
+            }
+          ]
+        },
+        {
+          "type": "clue",
+          "clues": [
+            {
+              "text": "SUKLAA VANILJA MANSIK-KA",
+              "direction": "across",
+              "arrow": "right"
+            },
+            {
+              "text": "EKAT KARKIT",
+              "direction": "down",
+              "arrow": "down"
+            }
+          ]
+        },
+        {
+          "type": "letter",
+          "solution": "T"
+        },
+        {
+          "type": "letter",
+          "solution": "R"
+        },
+        {
+          "type": "letter",
+          "solution": "I"
+        },
+        {
+          "type": "letter",
+          "solution": "O"
+        }
+      ],
+      [
+        {
+          "type": "blocked"
+        },
+        {
+          "type": "letter",
+          "solution": "A"
+        },
+        {
+          "type": "letter",
+          "solution": "N"
+        },
+        {
+          "type": "clue",
+          "clues": [
+            {
+              "text": "HUU-LEEN",
+              "direction": "across",
+              "arrow": "right"
+            },
+            {
+              "text": "MAALIT TÄÄLTÄ",
+              "direction": "down",
+              "arrow": "down"
+            }
+          ]
+        },
+        {
+          "type": "letter",
+          "solution": "D"
+        },
+        {
+          "type": "letter",
+          "solution": "E"
+        },
+        {
+          "type": "letter",
+          "solution": "N"
+        },
+        {
+          "type": "letter",
+          "solution": "S"
+        },
+        {
+          "type": "letter",
+          "solution": "S"
+        },
+        {
+          "type": "letter",
+          "solution": "I"
+        },
+        {
+          "type": "clue",
+          "clues": [
+            {
+              "text": "\"KATSO-TAANKO VÄHÄN VIDEOI-TA?\"",
+              "direction": "down",
+              "arrow": "down"
+            }
+          ]
+        },
+        {
+          "type": "blocked"
+        },
+        {
+          "type": "letter",
+          "solution": "M"
+        }
+      ],
+      [
+        {
+          "type": "clue",
+          "clues": [
+            {
+              "text": "TER-VEHDI VIRO-LAISTA!",
+              "direction": "across",
+              "arrow": "right"
+            }
+          ]
+        },
+        {
+          "type": "letter",
+          "solution": "T"
+        },
+        {
+          "type": "letter",
+          "solution": "E"
+        },
+        {
+          "type": "letter",
+          "solution": "R"
+        },
+        {
+          "type": "letter",
+          "solution": "E"
+        },
+        {
+          "type": "clue",
+          "clues": [
+            {
+              "text": "RÄJÄYT-TÄÄ SUN GMAILIN",
+              "direction": "across",
+              "arrow": "right"
+            }
+          ]
+        },
+        {
+          "type": "letter",
+          "solution": "S"
+        },
+        {
+          "type": "letter",
+          "solution": "Ä"
+        },
+        {
+          "type": "letter",
+          "solution": "P"
+        },
+        {
+          "type": "letter",
+          "solution": "O"
+        },
+        {
+          "type": "letter",
+          "solution": "T"
+        },
+        {
+          "type": "blocked"
+        },
+        {
+          "type": "letter",
+          "solution": "P"
+        }
+      ],
+      [
+        {
+          "type": "clue",
+          "clues": [
+            {
+              "text": "RÄJÄH-TÄÄ",
+              "direction": "across",
+              "arrow": "right"
+            }
+          ]
+        },
+        {
+          "type": "letter",
+          "solution": "T"
+        },
+        {
+          "type": "letter",
+          "solution": "N"
+        },
+        {
+          "type": "letter",
+          "solution": "T"
+        },
+        {
+          "type": "blocked"
+        },
+        {
+          "type": "clue",
+          "clues": [
+            {
+              "text": "AINA",
+              "direction": "across",
+              "arrow": "right"
+            }
+          ]
+        },
+        {
+          "type": "letter",
+          "solution": "A"
+        },
+        {
+          "type": "letter",
+          "solution": "L"
+        },
+        {
+          "type": "letter",
+          "solution": "A"
+        },
+        {
+          "type": "letter",
+          "solution": "T"
+        },
+        {
+          "type": "letter",
+          "solution": "I"
+        },
+        {
+          "type": "blocked"
+        },
+        {
+          "type": "letter",
+          "solution": "P"
+        }
+      ],
+      [
+        {
+          "type": "blocked"
+        },
+        {
+          "type": "letter",
+          "solution": "A"
+        },
+        {
+          "type": "clue",
+          "clues": [
+            {
+              "text": "SUORAS-SA (-I)",
+              "direction": "across",
+              "arrow": "right"
+            }
+          ]
+        },
+        {
+          "type": "letter",
+          "solution": "V"
+        },
+        {
+          "type": "letter",
+          "solution": "A"
+        },
+        {
+          "type": "letter",
+          "solution": "A"
+        },
+        {
+          "type": "letter",
+          "solution": "T"
+        },
+        {
+          "type": "letter",
+          "solution": "E"
+        },
+        {
+          "type": "letter",
+          "solution": "R"
+        },
+        {
+          "type": "clue",
+          "clues": [
+            {
+              "text": "TÄNNE RUOKA",
+              "direction": "across",
+              "arrow": "right"
+            }
+          ]
+        },
+        {
+          "type": "letter",
+          "solution": "S"
+        },
+        {
+          "type": "letter",
+          "solution": "U"
+        },
+        {
+          "type": "letter",
+          "solution": "U"
+        }
+      ]
+    ],
+    "author": "KATZZZ"
+  },
+  "savedAt": "2026-05-23T14:49:07.650Z"
+}
