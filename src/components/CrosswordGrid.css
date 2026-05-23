@@ -1,0 +1,114 @@
+/* Equal-size arrow-word grid. Tokens come from src/styles/tokens.css. */
+
+.xgrid {
+  --xgrid-cell: 48px; /* default; CrosswordGrid's cellSize prop overrides inline */
+  display: grid;
+  gap: 1px;
+  padding: 1px;
+  width: max-content;
+  margin-inline: auto; /* centers when it fits; left-aligns + scrolls when wider */
+  background: rgba(28, 40, 29, 0.25); /* hairline gridlines show through gaps */
+  border-radius: var(--r-sm);
+  border: 1px solid rgba(28, 40, 29, 0.25);
+}
+
+/* Shrink cells on phones so wide grids stay usable. */
+@media (max-width: 600px) {
+  .xgrid {
+    --xgrid-cell: 34px;
+  }
+}
+
+.xcell {
+  position: relative;
+  width: var(--xgrid-cell);
+  height: var(--xgrid-cell);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--pure-white);
+  overflow: hidden;
+}
+
+/* Active word slot highlight (warm tint behind letter cells). */
+.xcell.is-active.xcell--letter {
+  background: var(--cream);
+}
+
+/* Solve-mode "wrong" letter: orange, bold (the deck has no red). */
+.xcell.is-wrong.xcell--letter {
+  color: var(--orange);
+  font-weight: 700;
+}
+
+/* Validation issue marker: a small dot in the top-right corner. */
+.xcell.is-warning::after {
+  content: '';
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--grey-orange);
+}
+
+.xcell.is-interactive {
+  cursor: pointer;
+}
+
+.xcell.is-interactive:hover {
+  outline: 1px solid var(--mid-green);
+  outline-offset: -1px;
+}
+
+.xcell.is-selected {
+  box-shadow: inset 0 0 0 2px var(--orange);
+}
+
+/* Fillable letter cell. */
+.xcell--letter {
+  font-size: calc(var(--xgrid-cell) * 0.5);
+  font-weight: 500;
+  line-height: 1;
+  color: var(--dark-green);
+  text-transform: uppercase;
+}
+
+/* Not-in-play cell. */
+.xcell--blocked {
+  background: var(--dark-green);
+}
+
+/* Clue cell: up to two stacked clues, each with a leading arrow. */
+.xcell--clue {
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: center;
+  gap: 1px;
+  padding: 2px 3px;
+  background: var(--light-green);
+  color: var(--dark-green);
+  font-size: calc(var(--xgrid-cell) * 0.16);
+  line-height: 1.05;
+  text-align: left;
+}
+
+.xcell__clue {
+  display: flex;
+  align-items: flex-start;
+  gap: 2px;
+}
+
+.xcell__arrow {
+  flex: none;
+  font-weight: 700;
+  color: var(--mid-green);
+}
+
+.xcell__text {
+  overflow: hidden;
+  min-width: 0;
+  word-break: break-word;
+  hyphens: auto;
+}

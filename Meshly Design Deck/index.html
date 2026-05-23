@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Meshly — Design System</title>
+  <meta name="viewport" content="width=1440" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="pages.css" />
+</head>
+<body>
+
+  <!-- ===================== SIDEBAR ===================== -->
+  <aside class="sidebar">
+    <div class="sidebar__brand">
+      <img class="logo" src="assets/meshly-wordmark-white.png" alt="Meshly" />
+      <span class="tag">Design&nbsp;System v1.0</span>
+    </div>
+
+    <nav class="sidebar__group">
+      <h4 class="sidebar__title">Brand</h4>
+      <a class="sidebar__link" data-page="overview"><span class="num">00</span>Overview</a>
+      <a class="sidebar__link" data-page="vision"><span class="num">01</span>Vision &amp; Mission</a>
+      <a class="sidebar__link" data-page="values"><span class="num">02</span>Values</a>
+      <a class="sidebar__link" data-page="voice"><span class="num">03</span>Voice &amp; Tone</a>
+    </nav>
+
+    <nav class="sidebar__group">
+      <h4 class="sidebar__title">Foundations</h4>
+      <a class="sidebar__link" data-page="logo"><span class="num">04</span>Logo</a>
+      <a class="sidebar__link" data-page="color"><span class="num">05</span>Color</a>
+      <a class="sidebar__link" data-page="type"><span class="num">06</span>Typography</a>
+      <a class="sidebar__link" data-page="icons"><span class="num">07</span>Iconography</a>
+      <a class="sidebar__link" data-page="illustration"><span class="num">08</span>Illustration</a>
+      <a class="sidebar__link" data-page="shape"><span class="num">09</span>Shape &amp; Layout</a>
+    </nav>
+
+    <nav class="sidebar__group">
+      <h4 class="sidebar__title">Components</h4>
+      <a class="sidebar__link" data-page="buttons"><span class="num">10</span>Buttons</a>
+      <a class="sidebar__link" data-page="forms"><span class="num">11</span>Forms</a>
+      <a class="sidebar__link" data-page="cards"><span class="num">12</span>Cards &amp; Containers</a>
+      <a class="sidebar__link" data-page="data"><span class="num">13</span>Data &amp; Charts</a>
+    </nav>
+
+    <nav class="sidebar__group">
+      <h4 class="sidebar__title">In Use</h4>
+      <a class="sidebar__link" data-page="web"><span class="num">14</span>Web</a>
+      <a class="sidebar__link" data-page="deck"><span class="num">15</span>Deck Cover</a>
+      <a class="sidebar__link" data-page="stationery"><span class="num">16</span>Stationery</a>
+    </nav>
+
+    <div class="sidebar__footer">
+      meshly.fi<br/>
+      Helsinki / Finland<br/>
+      Last updated 04.30.26
+    </div>
+  </aside>
+
+  <!-- ===================== MAIN ===================== -->
+  <main class="main">
+
+    <!-- pages will be injected here from page partials -->
+    <div id="page-host"></div>
+
+  </main>
+
+  <!-- Page partials are simple HTML templates pulled in at load time.
+       For a static brand book, all pages live in this file via <template>s
+       and we toggle visibility via hash routing. -->
+
+  <script src="pages-shared.js?v=7"></script>
+  <script src="pages-brand.js?v=7"></script>
+  <script src="pages-foundation-a.js?v=7"></script>
+  <script src="pages-foundation-b.js?v=7"></script>
+  <script src="pages-components.js?v=7"></script>
+  <script src="pages-applied.js?v=7"></script>
+  <script src="app.js?v=7"></script>
+</body>
+</html>

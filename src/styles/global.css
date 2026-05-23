@@ -1,0 +1,430 @@
+/* ============================================================
+   Global app shell — built on Design Deck tokens (tokens.css).
+   ============================================================ */
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+}
+
+body {
+  font-family: var(--font-sans);
+  font-feature-settings: 'ss01', 'cv11';
+  background: var(--pale-green);
+  color: var(--dark-green);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+.app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* ---- Top bar ---- */
+.app__bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-5);
+  padding: var(--sp-4) var(--sp-6);
+  background: var(--dark-green);
+  color: var(--pale-green);
+  border-bottom: 1px solid rgba(108, 255, 82, 0.18);
+}
+
+.app__brand {
+  display: flex;
+  align-items: baseline;
+  gap: var(--sp-3);
+}
+
+.app__title {
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+
+.app__tagline {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--mid-green);
+}
+
+/* ---- Top-bar navigation ---- */
+.app__nav {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+}
+
+/* ---- Segmented mode toggle ---- */
+.mode-toggle {
+  display: inline-flex;
+  gap: var(--sp-1);
+  padding: var(--sp-1);
+  background: rgba(108, 255, 82, 0.08);
+  border-radius: 999px;
+}
+
+/* Standalone toggle button (Library) sitting next to the mode toggle. */
+.mode-toggle__btn--solo {
+  padding: var(--sp-2) var(--sp-4);
+  background: rgba(108, 255, 82, 0.08);
+  border-radius: 999px;
+}
+
+.mode-toggle__btn {
+  appearance: none;
+  border: 0;
+  cursor: pointer;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: var(--sp-2) var(--sp-4);
+  border-radius: 999px;
+  background: transparent;
+  color: rgba(239, 246, 228, 0.72);
+  transition:
+    background 120ms ease,
+    color 120ms ease;
+}
+
+.mode-toggle__btn:hover {
+  color: var(--pale-green);
+}
+
+.mode-toggle__btn.is-active {
+  background: var(--terminal-green);
+  color: var(--dark-green);
+}
+
+/* ---- Main content ---- */
+.app__main {
+  flex: 1;
+  width: 100%;
+  max-width: var(--content-max);
+  margin: 0 auto;
+  padding: var(--sp-7) var(--sp-6);
+}
+
+.placeholder {
+  background: var(--pure-white);
+  border: 1px solid rgba(28, 40, 29, 0.08);
+  border-radius: var(--r-lg);
+  padding: var(--sp-7);
+  text-align: center;
+  color: var(--mid-green);
+}
+
+.placeholder__eyebrow {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--mid-green);
+  margin-bottom: var(--sp-3);
+}
+
+.placeholder__text {
+  font-size: 16px;
+  color: var(--dark-green);
+  margin: 0;
+}
+
+/* ---- Build / Solve mode shared ---- */
+.build__head,
+.solve__head {
+  margin-bottom: var(--sp-5);
+}
+
+.solve__title {
+  font-size: 28px;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  margin: var(--sp-2) 0 var(--sp-1);
+  color: var(--dark-green);
+}
+
+.solve__hint {
+  margin: 0;
+  font-size: 14px;
+  color: var(--mid-green);
+}
+
+.solve__toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-2);
+  margin-bottom: var(--sp-4);
+}
+
+.solve__done {
+  margin-bottom: var(--sp-4);
+  padding: var(--sp-3) var(--sp-4);
+  border-radius: var(--r-md);
+  background: var(--terminal-green);
+  color: var(--dark-green);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.solve__grid {
+  /* Block + overflow so a grid wider than the viewport scrolls horizontally;
+     .xgrid's margin-inline:auto keeps it centered when it fits. */
+  overflow-x: auto;
+  padding: var(--sp-6);
+  background: var(--pure-white);
+  border: 1px solid rgba(28, 40, 29, 0.08);
+  border-radius: var(--r-lg);
+}
+
+.solve__grid:focus-visible {
+  outline: 2px solid var(--terminal-green);
+  outline-offset: 2px;
+}
+
+.build__title {
+  font-size: 28px;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  margin: var(--sp-2) 0 var(--sp-1);
+  color: var(--dark-green);
+}
+
+.build__hint {
+  margin: 0;
+  font-size: 14px;
+  color: var(--mid-green);
+}
+
+.build__controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: var(--sp-4);
+  margin-bottom: var(--sp-4);
+  padding-bottom: var(--sp-4);
+  border-bottom: 1px solid rgba(28, 40, 29, 0.12);
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--mid-green);
+}
+
+.field--grow {
+  flex: 1 1 200px;
+}
+
+.field input {
+  padding: var(--sp-2);
+  border: 1px solid rgba(28, 40, 29, 0.2);
+  border-radius: var(--r-sm);
+  background: var(--pure-white);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  letter-spacing: normal;
+  text-transform: none;
+  color: var(--dark-green);
+}
+
+.field input:focus-visible {
+  outline: 2px solid var(--terminal-green);
+  outline-offset: 1px;
+}
+
+.stepper {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--mid-green);
+}
+
+.stepper__controls {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+}
+
+.stepper__btn {
+  width: 30px;
+  height: 30px;
+  border-radius: var(--r-sm);
+  border: 1px solid var(--dark-green);
+  background: var(--dark-green);
+  color: var(--pale-green);
+  font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+  transition: background 120ms ease;
+}
+
+.stepper__btn:hover:not(:disabled) {
+  background: var(--terminal-green);
+  border-color: var(--terminal-green);
+  color: var(--dark-green);
+}
+
+.stepper__btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.stepper__value {
+  min-width: 22px;
+  text-align: center;
+  font-family: var(--font-sans);
+  font-size: 15px;
+  color: var(--dark-green);
+}
+
+.build__toolbar {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  margin-bottom: var(--sp-4);
+}
+
+.btn {
+  appearance: none;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: var(--sp-2) var(--sp-4);
+  border-radius: 999px;
+  border: 1px solid var(--dark-green);
+  background: var(--dark-green);
+  color: var(--pale-green);
+  cursor: pointer;
+  transition:
+    background 120ms ease,
+    color 120ms ease,
+    opacity 120ms ease;
+}
+
+.btn:hover:not(:disabled) {
+  background: var(--terminal-green);
+  border-color: var(--terminal-green);
+  color: var(--dark-green);
+}
+
+.btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* Visible keyboard focus for all interactive controls (a11y). */
+.btn:focus-visible,
+.mode-toggle__btn:focus-visible,
+.stepper__btn:focus-visible {
+  outline: 2px solid var(--terminal-green);
+  outline-offset: 2px;
+}
+
+.build__status {
+  margin-left: auto;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--mid-green);
+}
+
+.build__status--warn {
+  margin-left: 0;
+  color: var(--grey-orange);
+}
+
+.build__layout {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-5);
+  flex-wrap: wrap;
+}
+
+.build__grid {
+  flex: 1 1 320px;
+  min-width: 0; /* allow the flex item to shrink so overflow-x can scroll */
+  overflow-x: auto;
+  padding: var(--sp-6);
+  background: var(--pure-white);
+  border: 1px solid rgba(28, 40, 29, 0.08);
+  border-radius: var(--r-lg);
+}
+
+.build__panel {
+  flex: 1 1 240px;
+  min-width: 240px;
+  padding: var(--sp-5);
+  background: var(--pure-white);
+  border: 1px solid rgba(28, 40, 29, 0.08);
+  border-radius: var(--r-lg);
+}
+
+.btn--ghost {
+  background: none;
+  color: var(--dark-green);
+  border-color: var(--dark-green);
+}
+
+.btn--ghost:hover:not(:disabled) {
+  background: var(--dark-green);
+  color: var(--pale-green);
+}
+
+.build__grid:focus-visible {
+  outline: 2px solid var(--terminal-green);
+  outline-offset: 2px;
+}
+
+@media (max-width: 600px) {
+  .app__bar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--sp-3);
+  }
+
+  .app__nav {
+    flex-wrap: wrap;
+  }
+
+  .app__main {
+    padding: var(--sp-5) var(--sp-4);
+  }
+
+  .build__grid,
+  .solve__grid,
+  .build__panel,
+  .library__current,
+  .library__import,
+  .library__saved {
+    padding: var(--sp-4);
+  }
+}

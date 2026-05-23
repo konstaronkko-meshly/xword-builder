@@ -1,0 +1,51 @@
+/* ============================================================
+   Design tokens — mirrored from the Meshly Design Deck
+   (Meshly Design Deck/styles.css). All UI must use these.
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Geist:wght@100;200;300;400;500;600;700;800;900&family=Geist+Mono:wght@400;500;600&display=swap');
+
+:root {
+  /* Core palette */
+  --dark-green: #1c281d;
+  --terminal-green: #6cff52;
+  --mid-green: #6f9362;
+  --light-green: #c9e0af;
+  --pale-green: #eff6e4;
+  --pure-white: #ffffff;
+  --pure-black: #000000;
+
+  /* Extended */
+  --orange: #ffa74e;
+  --cyan: #80d9fd;
+  --grey-orange: #b8824b;
+  --grey-cyan: #587e8d;
+  --cream: #fdefd7;
+  --light-green-grey: #dcecf1;
+
+  /* Type */
+  --font-sans:
+    'Geist', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  --font-mono: 'Geist Mono', ui-monospace, Menlo, monospace;
+
+  /* Spacing */
+  --sp-1: 4px;
+  --sp-2: 8px;
+  --sp-3: 12px;
+  --sp-4: 16px;
+  --sp-5: 24px;
+  --sp-6: 32px;
+  --sp-7: 48px;
+  --sp-8: 64px;
+  --sp-9: 96px;
+
+  /* Radii */
+  --r-sm: 6px;
+  --r-md: 12px;
+  --r-lg: 20px;
+  --r-xl: 32px;
+  --r-2xl: 48px;
+
+  /* Layout */
+  --content-max: 1120px;
+}
