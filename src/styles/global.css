@@ -149,6 +149,51 @@ body {
   color: var(--mid-green);
 }
 
+.build__toolbar {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  margin-bottom: var(--sp-4);
+}
+
+.btn {
+  appearance: none;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: var(--sp-2) var(--sp-4);
+  border-radius: 999px;
+  border: 1px solid var(--dark-green);
+  background: var(--dark-green);
+  color: var(--pale-green);
+  cursor: pointer;
+  transition:
+    background 120ms ease,
+    color 120ms ease,
+    opacity 120ms ease;
+}
+
+.btn:hover:not(:disabled) {
+  background: var(--terminal-green);
+  border-color: var(--terminal-green);
+  color: var(--dark-green);
+}
+
+.btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.build__status {
+  margin-left: auto;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--mid-green);
+}
+
 .build__grid {
   display: flex;
   justify-content: center;
@@ -156,6 +201,11 @@ body {
   background: var(--pure-white);
   border: 1px solid rgba(28, 40, 29, 0.08);
   border-radius: var(--r-lg);
+}
+
+.build__grid:focus-visible {
+  outline: 2px solid var(--terminal-green);
+  outline-offset: 2px;
 }
 
 @media (max-width: 600px) {

@@ -1,6 +1,20 @@
 import { describe, expect, it } from 'vitest'
-import { isLetterCell } from './cells'
-import { MAX_DIMENSION, createEmptyPuzzle, getCell, isInBounds } from './puzzle'
+import { deriveSlots } from '../logic'
+import {
+  isBlockedCell,
+  isClueCell,
+  isLetterCell,
+  makeClue,
+  makeClueCell,
+} from './cells'
+import {
+  MAX_DIMENSION,
+  createEmptyPuzzle,
+  getCell,
+  isInBounds,
+  setCellType,
+  withCell,
+} from './puzzle'
 
 describe('createEmptyPuzzle', () => {
   it('builds a grid of the requested size filled with empty letter cells', () => {
@@ -43,5 +57,56 @@ describe('isInBounds / getCell', () => {
   it('returns the cell in bounds and undefined out of bounds', () => {
     expect(getCell(puzzle, { row: 0, col: 0 })).toBe(puzzle.cells[0][0])
     expect(getCell(puzzle, { row: 5, col: 5 })).toBeUndefined()
+  })
+})
+
+describe('withCell', () => {
+  it('replaces a single cell without mutating the original', () => {
+    const puzzle = createEmptyPuzzle(2, 2)
+    const next = withCell(puzzle, { row: 1, col: 0 }, { type: 'blocked' })
+    expect(isBlockedCell(next.cells[1][0])).toBe(true)
+    expect(next).not.toBe(puzzle)
+    expect(isLetterCell(puzzle.cells[1][0])).toBe(true) // original untouched
+    expect(next.cells[0]).toBe(puzzle.cells[0]) // unchanged rows are shared
+  })
+
+  it('throws for an out-of-bounds coordinate', () => {
+    const puzzle = createEmptyPuzzle(2, 2)
+    expect(() =>
+      withCell(puzzle, { row: 5, col: 0 }, { type: 'blocked' }),
+    ).toThrow(RangeError)
+  })
+})
+
+describe('setCellType', () => {
+  it('switches a cell to each type, dropping dependent data', () => {
+    const start = withCell(
+      createEmptyPuzzle(1, 2),
+      { row: 0, col: 0 },
+      makeClueCell([makeClue('Vihje', 'across', 'right')]),
+    )
+    const coord = { row: 0, col: 0 }
+
+    const toLetter = setCellType(start, coord, 'letter')
+    expect(toLetter.cells[0][0]).toEqual({ type: 'letter', solution: '' }) // clues dropped
+
+    const toBlocked = setCellType(start, coord, 'blocked')
+    expect(isBlockedCell(toBlocked.cells[0][0])).toBe(true)
+
+    const toClue = setCellType(toLetter, coord, 'clue')
+    expect(isClueCell(toClue.cells[0][0])).toBe(true)
+  })
+
+  it('causes word slots to re-derive after a change', () => {
+    // A clue cell at (0,0) pointing right into two letters → one slot.
+    const puzzle = withCell(
+      createEmptyPuzzle(1, 3),
+      { row: 0, col: 0 },
+      makeClueCell([makeClue('Vihje', 'across', 'right')]),
+    )
+    expect(deriveSlots(puzzle)).toHaveLength(1)
+
+    const blocked = setCellType(puzzle, { row: 0, col: 0 }, 'blocked')
+    expect(deriveSlots(blocked)).toHaveLength(0)
   })
 })

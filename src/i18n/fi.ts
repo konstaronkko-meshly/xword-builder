@@ -14,7 +14,16 @@ export const fi = {
   },
   build: {
     eyebrow: 'Rakennustila',
-    sampleHint: 'Esikatselu — ruudukon muokkaustyökalut tulevat seuraavaksi.',
+    editHint:
+      'Valitse ruutu ja aseta sen tyyppi. Nuolinäppäimet siirtävät valintaa, näppäimet 1–3 vaihtavat tyypin.',
+    tools: {
+      label: 'Ruututyökalut',
+      gridLabel: 'Ristikon ruudukko',
+      letter: 'Kirjain',
+      clue: 'Vihje',
+      blocked: 'Musta',
+      slots: 'Sanoja',
+    },
   },
   solve: {
     eyebrow: 'Ratkaisutila',

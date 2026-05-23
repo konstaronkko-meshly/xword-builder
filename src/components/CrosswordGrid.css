@@ -20,6 +20,19 @@
   overflow: hidden;
 }
 
+.xcell.is-interactive {
+  cursor: pointer;
+}
+
+.xcell.is-interactive:hover {
+  outline: 1px solid var(--mid-green);
+  outline-offset: -1px;
+}
+
+.xcell.is-selected {
+  box-shadow: inset 0 0 0 2px var(--orange);
+}
+
 /* Fillable letter cell. */
 .xcell--letter {
   font-size: calc(var(--xgrid-cell) * 0.5);

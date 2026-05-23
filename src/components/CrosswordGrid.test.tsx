@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
-import { cleanup, render } from '@testing-library/react'
-import { afterEach, describe, expect, it } from 'vitest'
+import { cleanup, fireEvent, render } from '@testing-library/react'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 import { createEmptyPuzzle } from '../model'
 import { createSamplePuzzle } from '../fixtures/samplePuzzle'
 import { CrosswordGrid } from './CrosswordGrid'
@@ -44,5 +44,36 @@ describe('CrosswordGrid', () => {
     )
     const grid = container.querySelector('.xgrid') as HTMLElement
     expect(grid.style.gridTemplateColumns).toContain('repeat(7,')
+  })
+
+  it('reports the clicked coordinate when interactive', () => {
+    const onSelect = vi.fn()
+    const { container } = render(
+      <CrosswordGrid
+        puzzle={createEmptyPuzzle(2, 2)}
+        onSelectCell={onSelect}
+      />,
+    )
+    const cells = container.querySelectorAll('[role="gridcell"]')
+    fireEvent.click(cells[3]) // row 1, col 1
+    expect(onSelect).toHaveBeenCalledWith({ row: 1, col: 1 })
+  })
+
+  it('marks the selected cell and stays read-only without a handler', () => {
+    const { container, rerender } = render(
+      <CrosswordGrid puzzle={createEmptyPuzzle(2, 2)} />,
+    )
+    expect(container.querySelector('.is-interactive')).toBeNull()
+
+    rerender(
+      <CrosswordGrid
+        puzzle={createEmptyPuzzle(2, 2)}
+        selected={{ row: 0, col: 1 }}
+        onSelectCell={() => {}}
+      />,
+    )
+    const cells = container.querySelectorAll('[role="gridcell"]')
+    expect(cells[1].className).toContain('is-selected')
+    expect(cells[0].className).toContain('is-interactive')
   })
 })

@@ -27,4 +27,12 @@ export {
   normalizeLetter,
 } from './cells'
 
-export { MAX_DIMENSION, createEmptyPuzzle, getCell, isInBounds } from './puzzle'
+export {
+  MAX_DIMENSION,
+  createEmptyPuzzle,
+  getCell,
+  isInBounds,
+  setCellType,
+  withCell,
+  type CellType,
+} from './puzzle'
