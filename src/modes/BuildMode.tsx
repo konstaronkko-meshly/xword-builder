@@ -1,8 +1,14 @@
-import { useMemo, useRef, useState, type KeyboardEvent } from 'react'
+import {
+  useMemo,
+  useRef,
+  useState,
+  type Dispatch,
+  type KeyboardEvent,
+  type SetStateAction,
+} from 'react'
 import { ClueEditor } from '../components/ClueEditor'
 import { CrosswordGrid } from '../components/CrosswordGrid'
 import { scrollCellIntoView } from '../components/gridScroll'
-import { createSamplePuzzle } from '../fixtures/samplePuzzle'
 import { fi } from '../i18n/fi'
 import {
   deriveSlots,
@@ -30,6 +36,7 @@ import {
   type CellType,
   type Coord,
   type Direction,
+  type Puzzle,
 } from '../model'
 
 const straightArrow = (direction: Direction) =>
@@ -81,8 +88,12 @@ const ARROW_DELTAS: Record<string, Coord> = {
   ArrowRight: { row: 0, col: 1 },
 }
 
-export function BuildMode() {
-  const [puzzle, setPuzzle] = useState(createSamplePuzzle)
+interface BuildModeProps {
+  puzzle: Puzzle
+  setPuzzle: Dispatch<SetStateAction<Puzzle>>
+}
+
+export function BuildMode({ puzzle, setPuzzle }: BuildModeProps) {
   const [selected, setSelected] = useState<Coord | null>(null)
   const [direction, setDirection] = useState<Direction>('across')
   const gridRef = useRef<HTMLDivElement>(null)

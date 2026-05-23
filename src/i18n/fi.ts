@@ -52,7 +52,8 @@ export const fi = {
   },
   solve: {
     eyebrow: 'Ratkaisutila',
-    placeholder: 'Ristikon täyttö tulee tähän.',
+    hint: 'Lue vihjeet ruuduista ja täytä kirjaimet. Vastaukset eivät näy.',
+    gridLabel: 'Ratkaistava ruudukko',
   },
 } as const
 

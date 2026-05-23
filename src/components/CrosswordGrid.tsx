@@ -28,6 +28,13 @@ interface CrosswordGridProps {
   highlighted?: ReadonlyArray<Coord>
   /** Cells with a validation issue, flagged with a warning marker. */
   warnings?: ReadonlyArray<Coord>
+  /**
+   * Whether letter cells show their solution. Build mode: true (default).
+   * Solve mode: false — letter cells show `entries` instead, never the answer.
+   */
+  showSolutions?: boolean
+  /** Entered letters by `${row}-${col}` key (solve mode). */
+  entries?: ReadonlyMap<string, string>
 }
 
 const coordKey = (c: Coord) => `${c.row}-${c.col}`
@@ -45,6 +52,8 @@ export function CrosswordGrid({
   onSelectCell,
   highlighted = [],
   warnings = [],
+  showSolutions = true,
+  entries,
 }: CrosswordGridProps) {
   const highlightedKeys = new Set(highlighted.map(coordKey))
   const warningKeys = new Set(warnings.map(coordKey))
@@ -64,11 +73,17 @@ export function CrosswordGrid({
       {puzzle.cells.flatMap((row, r) =>
         row.map((cell, c) => {
           const key = `${r}-${c}`
+          const letter = isLetterCell(cell)
+            ? showSolutions
+              ? cell.solution
+              : (entries?.get(key) ?? '')
+            : ''
           return (
             <CellView
               key={key}
               cell={cell}
               coordKey={key}
+              letter={letter}
               selected={selected?.row === r && selected.col === c}
               active={highlightedKeys.has(key)}
               warning={warningKeys.has(key)}
@@ -85,7 +100,7 @@ export function CrosswordGrid({
   )
 }
 
-function cellContent(cell: Cell) {
+function cellContent(cell: Cell, letter: string) {
   if (isClueCell(cell)) {
     return cell.clues.map((clue, i) => (
       <span className="xcell__clue" key={i}>
@@ -94,13 +109,14 @@ function cellContent(cell: Cell) {
       </span>
     ))
   }
-  if (isLetterCell(cell)) return cell.solution
+  if (isLetterCell(cell)) return letter
   return null
 }
 
 interface CellViewProps {
   cell: Cell
   coordKey: string
+  letter: string
   selected: boolean
   active: boolean
   warning: boolean
@@ -110,6 +126,7 @@ interface CellViewProps {
 function CellView({
   cell,
   coordKey,
+  letter,
   selected,
   active,
   warning,
@@ -130,7 +147,7 @@ function CellView({
       aria-selected={onSelect ? selected : undefined}
       onClick={onSelect}
     >
-      {cellContent(cell)}
+      {cellContent(cell, letter)}
     </div>
   )
 }
