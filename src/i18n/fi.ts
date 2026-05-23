@@ -135,7 +135,18 @@ export const fi = {
     },
     symbols: {
       title: 'Symbolit',
-      body: 'Ruudukon värit, nuolet ja korostukset selitetään tässä.',
+      intro: 'Ruudukon ruudut, nuolet ja korostukset:',
+      legend: {
+        letter: 'Kirjainruutu — täytettävä kirjain',
+        clue: 'Vihjeruutu — vihje tai kuva',
+        blocked: 'Musta ruutu — ei käytössä',
+        arrowRight: 'Nuoli: vastaus jatkuu oikealle',
+        arrowDown: 'Nuoli: vastaus jatkuu alas',
+        solution: 'Ratkaisusana — kootaan ristikkäisistä vastauksista',
+        active: 'Aktiivinen sana',
+        wrong: 'Väärä kirjain (Tarkista)',
+        warning: 'Huomautus rakennustilassa',
+      },
     },
     solutionWord: {
       title: 'Ratkaisusana',

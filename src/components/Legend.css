@@ -1,0 +1,37 @@
+/* Symbol legend for the Ohje overlay. Swatches reuse .xcell (CrosswordGrid.css);
+   --xgrid-cell sizes them down to key-sized squares. */
+
+.legend {
+  --xgrid-cell: 30px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+
+.legend__item {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+}
+
+.legend__item .xcell {
+  flex: none;
+  border: 1px solid rgba(28, 40, 29, 0.15);
+  border-radius: 2px;
+}
+
+/* Arrow glyph shown in a clue-coloured swatch (overrides the tiny clue font). */
+.legend__arrow {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--mid-green);
+}
+
+.legend__label {
+  font-size: 14px;
+  line-height: 1.4;
+  color: var(--dark-green);
+}

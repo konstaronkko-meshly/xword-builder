@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import { fi } from '../i18n/fi'
+import { Legend } from './Legend'
 import './HelpOverlay.css'
 
 interface HelpOverlayProps {
@@ -78,7 +79,12 @@ export function HelpOverlay({ onClose }: HelpOverlayProps) {
             </dl>
           </section>
 
-          <Prose title={h.symbols.title} body={h.symbols.body} />
+          <section className="help__section">
+            <h3 className="help__heading">{h.symbols.title}</h3>
+            <p className="help__text">{h.symbols.intro}</p>
+            <Legend />
+          </section>
+
           <Prose title={h.solutionWord.title} body={h.solutionWord.body} />
           <Prose title={h.printing.title} body={h.printing.body} />
         </div>
