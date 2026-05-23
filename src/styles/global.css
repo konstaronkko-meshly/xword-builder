@@ -1,0 +1,139 @@
+/* ============================================================
+   Global app shell — built on Design Deck tokens (tokens.css).
+   ============================================================ */
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+}
+
+body {
+  font-family: var(--font-sans);
+  font-feature-settings: 'ss01', 'cv11';
+  background: var(--pale-green);
+  color: var(--dark-green);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+.app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* ---- Top bar ---- */
+.app__bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-5);
+  padding: var(--sp-4) var(--sp-6);
+  background: var(--dark-green);
+  color: var(--pale-green);
+  border-bottom: 1px solid rgba(108, 255, 82, 0.18);
+}
+
+.app__brand {
+  display: flex;
+  align-items: baseline;
+  gap: var(--sp-3);
+}
+
+.app__title {
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+
+.app__tagline {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--mid-green);
+}
+
+/* ---- Segmented mode toggle ---- */
+.mode-toggle {
+  display: inline-flex;
+  gap: var(--sp-1);
+  padding: var(--sp-1);
+  background: rgba(108, 255, 82, 0.08);
+  border-radius: 999px;
+}
+
+.mode-toggle__btn {
+  appearance: none;
+  border: 0;
+  cursor: pointer;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: var(--sp-2) var(--sp-4);
+  border-radius: 999px;
+  background: transparent;
+  color: rgba(239, 246, 228, 0.72);
+  transition:
+    background 120ms ease,
+    color 120ms ease;
+}
+
+.mode-toggle__btn:hover {
+  color: var(--pale-green);
+}
+
+.mode-toggle__btn.is-active {
+  background: var(--terminal-green);
+  color: var(--dark-green);
+}
+
+/* ---- Main content ---- */
+.app__main {
+  flex: 1;
+  width: 100%;
+  max-width: var(--content-max);
+  margin: 0 auto;
+  padding: var(--sp-7) var(--sp-6);
+}
+
+.placeholder {
+  background: var(--pure-white);
+  border: 1px solid rgba(28, 40, 29, 0.08);
+  border-radius: var(--r-lg);
+  padding: var(--sp-7);
+  text-align: center;
+  color: var(--mid-green);
+}
+
+.placeholder__eyebrow {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--mid-green);
+  margin-bottom: var(--sp-3);
+}
+
+.placeholder__text {
+  font-size: 16px;
+  color: var(--dark-green);
+  margin: 0;
+}
+
+@media (max-width: 600px) {
+  .app__bar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--sp-3);
+  }
+}
